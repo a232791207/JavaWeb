@@ -1,0 +1,83 @@
+/*È«¾Ö*/
+*{
+	margin:0;
+	padding: 0; 
+}
+body{
+	width: 100%;
+	height: auto;
+}
+.head{
+	width: 100%;
+	height: 150px;
+	background: #CCCCCC;
+}
+.head-com{
+	width: 80%;
+	height: 100px;
+	margin: 0 auto;
+	line-height: 140px;
+}
+.monery{
+	width: 100%;
+	height: 150px;
+	background: #CCCCCC;
+}
+.monery-num{
+	width: 80%;
+	height: 100px;
+	margin: 0 auto;
+	line-height: 140px;
+}
+.next{
+	width: 100%;
+	height: 150px;
+	background: #CCCCCC;
+}
+.next-con{
+	width: 80%;
+	height: 100px;
+	margin: 0 auto;
+	line-height: 140px;
+}
+.cent{
+	width: 100%;
+	height: 1200px;
+	background: #CCCCCC;
+}
+.cent-dete{
+	width: 60%;
+	height: 100px;
+	margin: 0 auto;
+	line-height: 100px;
+}
+.cen-yes{
+	width: 40%;
+	height: 100px;
+	margin: 0 auto;
+	line-height: 100px;
+}
+.foot-list{
+	position:fixed;
+	bottom: 0px;
+	width: 100%;
+	height: 105px;
+	background-color: #CCCCCC;
+}
+.foot-list ul li{
+	list-style-type: none;
+	float: left;
+	line-height: 105px;
+	border-left:1px #fff solid;
+	border-bottom:1px #fff solid;
+	border-top:1px #fff solid;
+	width: 20%;
+	box-sizing: border-box;
+	text-align:center;
+	background-color: #333366;
+}
+.foot-list ul li a{
+	text-decoration: none;
+	color: #fff;
+	font-size: 40px;
+}

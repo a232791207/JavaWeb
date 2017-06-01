@@ -1,0 +1,128 @@
+/*全局*/
+*{
+	margin:0;
+	padding: 0; 
+}
+body{
+	width: 100%;
+	height: auto;
+}
+.heads{
+	width: 100%;
+	height: 180px;
+	background: #CCCCCC;
+}
+.heads-con{
+	margin: 0 auto;
+	height: 70px;
+	width: 90%;
+	text-align: center;
+}
+.heads-con ul li{
+ list-style: none;
+ float: left;
+ height: 70px;
+ line-height: 60px;
+ width: 50%;
+ box-sizing: border-box;
+
+}
+.heads-con ul li a{
+	text-decoration: none;
+	font-size: 40px;
+	color: black;
+box-sizing: border-box;
+}
+.header{
+	width: 100%;
+	height: 130px;
+	background: #CCCCCC;
+}
+.header-btm{
+	width: 60%;
+	margin: 0 auto;
+	font-size: 30px;
+}
+.cent{
+	width: 100%;
+	height: 480px;
+	background: #CCCCCC;
+}
+.cent-con{
+	margin: 0 auto;
+	text-align: center;
+}
+.cent-con a{
+	text-decoration: none;
+}
+.cent-con ul li{
+	height: 120px;
+	list-style: none;
+	background: #87CEFA;
+	font-size: 40px;
+}
+.info{
+	width: 100%;
+	height: 780px;
+	background: #CCCCCC;
+}
+.info-menu{
+	width: 100%;
+	height: 90px;
+	background: #CCCCCC;
+	text-align: center;
+}
+
+.info-menu ul li{
+	float: left;
+	width: 50%;
+	list-style: none;
+	font-size: 30px;
+}
+.info-num{
+	width: 100%;
+	text-align: center;
+
+}
+.info-num table{
+	width: 100%;
+}
+.info-num tr td{
+	width: 50%;
+	font-size: 20px;
+	line-height: 30px;
+}
+.more{
+	width: 100%;
+	height: 70px;
+	background: #669966;
+	text-align: center;
+}
+.more a{
+	text-decoration: none;
+	font-size: 50px;
+}
+.foot-list{
+	position:fixed;
+	bottom: 0px;
+	width: 100%;
+	height: 105px;
+	background-color: yellow;
+}
+.foot-list ul li{
+	list-style-type: none;
+	float: left;
+	line-height: 105px;
+	border-left:1px #fff solid;
+	border-bottom:1px #fff solid;
+	border-top:1px #fff solid;
+	width: 20%;
+	box-sizing: border-box;
+	text-align:center;
+	background-color: #333366;
+}
+.foot-list ul li a{
+	text-decoration: none;
+	color: #fff;
+	font-size: 40px;
+}

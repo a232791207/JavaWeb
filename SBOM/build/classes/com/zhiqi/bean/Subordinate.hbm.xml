@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-12-15 12:07:42 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+	
+    <class name="com.zhiqi.bean.Subordinate" table="subordinate">
+        <id name="subUserName" type="java.lang.String">
+            <column name="subUserName" />
+            <generator class="assigned" />
+        </id>
+        <property name="supUserName" type="java.lang.String">
+            <column name="supUserName" />
+        </property>
+        <property name="nickName" type="java.lang.String">
+            <column name="nickName" />
+        </property>
+        <property name="phoneNum" type="java.lang.String">
+            <column name="phoneNum" />
+        </property>
+        <property name="registTime" type="java.lang.String">
+            <column name="registTime" />
+        </property>
+        <property name="recentTime" type="java.lang.String">
+            <column name="recentTime" />
+        </property>
+        <property name="todayConsumption" type="java.lang.Integer">
+            <column name="todayConsumption" />
+        </property>
+        <property name="monthConsumption" type="java.lang.Integer">
+            <column name="monthConsumption" />
+        </property>
+        <property name="sumConsumption" type="java.lang.Integer">
+            <column name="sumConsumption" />
+        </property>
+        <property name="inviteNum" type="java.lang.Integer">
+            <column name="inviteNum" />
+        </property>
+        <property name="supLevel" type="java.lang.Short">
+            <column name="supLevel" />
+        </property>
+        <property name="subLevel" type="java.lang.Short">
+            <column name="subLevel" />
+        </property>
+    </class>
+</hibernate-mapping>

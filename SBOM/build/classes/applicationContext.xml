@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
+
+    <!-- 导入资源文件 -->
+    <context:property-placeholder location="classpath:db.properties" />
+
+    <!-- 配置C3P0数据源 -->
+
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="user" value="${jdbc.user}"></property>
+        <property name="password" value="${jdbc.password}"></property>
+        <property name="driverClass" value="${jdbc.driverClass}"></property>
+        <property name="jdbcUrl" value="${jdbc.jdbcUrl}"></property>
+        <property name="initialPoolSize" value="${jdbc.initPoolSize}"></property>
+        <property name="maxPoolSize" value="${jdbc.maxPoolSize}"></property>
+    </bean>
+    <bean id="sessionFactorys" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+       <property name="dataSource" ref="dataSource"></property>
+       <property name="configLocation" value="classpath:hibernate.cfg.xml"></property>
+       <property name="mappingLocations" value="classpath:com/zhiqi/bean/*.hbm.xml"></property>
+       <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.temp.use_jdbc_metadata_defaults">false</prop>
+                <prop key="hibernate.current_session_context_class">
+                    org.springframework.orm.hibernate4.SpringSessionContext
+                </prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+            </props>
+        </property>
+    </bean>
+    
+    <!-- 该 BeanPostProcessor 将自动对标注 @Autowired 的 Bean 进行注入 -->
+	<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>
+    
+    
+    <!-- 构造方法注入会话工厂组件sessionFactory -->
+    <bean id="userDao" class="com.zhiqi.dao.impl.UserDaoImpl">
+        <constructor-arg>
+            <ref bean="sessionFactorys"/>
+        </constructor-arg>
+    </bean>
+    <bean id="superUserDao" class="com.zhiqi.dao.impl.SuperUserDaoImpl">
+        <constructor-arg>
+            <ref bean="sessionFactorys"/>
+        </constructor-arg>
+    </bean>
+    <bean id="cooperaterDao" class="com.zhiqi.dao.impl.CooperaterDaoImpl">
+        <constructor-arg>
+            <ref bean="sessionFactorys"/>
+        </constructor-arg>
+    </bean>
+    <bean id="cashBillDao" class="com.zhiqi.dao.impl.CashBillDaoImpl">
+        <constructor-arg>
+            <ref bean="sessionFactorys"/>
+        </constructor-arg>
+    </bean>
+    <bean id="diamondBillDao" class="com.zhiqi.dao.impl.DiamondBillDaoImpl">
+        <constructor-arg>
+            <ref bean="sessionFactorys"/>
+        </constructor-arg>
+    </bean>
+    <bean id="subordinateDao" class="com.zhiqi.dao.impl.SubordinateDaoImpl">
+        <constructor-arg>
+            <ref bean="sessionFactorys"/>
+        </constructor-arg>
+    </bean>
+    <bean id="newsInfoDao" class="com.zhiqi.dao.impl.NewsInfoDaoImpl">
+        <constructor-arg>
+            <ref bean="sessionFactorys"/>
+        </constructor-arg>
+    </bean>
+    <bean id="noticeDao" class="com.zhiqi.dao.impl.NoticeDaoImpl">
+        <constructor-arg>
+            <ref bean="sessionFactorys"/>
+        </constructor-arg>
+    </bean>
+    
+    
+    <!-- 设值注入DAO组件 -->
+    <bean id="userService" class="com.zhiqi.service.impl.UserServiceImpl">
+    	<property name="userDao" ref="userDao"></property>
+    </bean>
+     <bean id="superUserService" class="com.zhiqi.service.impl.SuperUserServiceImpl">
+    	<property name="superUserDao" ref="superUserDao"></property>
+    </bean>
+     <bean id="cooperaterService" class="com.zhiqi.service.impl.CooperaterServiceImpl">
+    	<property name="cooperaterDao" ref="cooperaterDao"></property>
+    </bean>
+    <bean id="cashBillService" class="com.zhiqi.service.impl.CashBillServiceImpl">
+    	<property name="cashBillDao" ref="cashBillDao"></property>
+    </bean>
+    <bean id="diamondBillService" class="com.zhiqi.service.impl.DiamondBillServiceImpl">
+    	<property name="diamondBillDao" ref="diamondBillDao"></property>
+    </bean>
+    <bean id="subordinateService" class="com.zhiqi.service.impl.SubordinateServiceImpl">
+    	<property name="subordinateDao" ref="subordinateDao"></property>
+    </bean>
+    <bean id="newsInfoService" class="com.zhiqi.service.impl.NewsInfoServiceImpl">
+    	<property name="newsInfoDao" ref="newsInfoDao"></property>
+    </bean>
+    <bean id="noticeService" class="com.zhiqi.service.impl.NoticeServiceImpl">
+    	<property name="noticeDao" ref="noticeDao"></property>
+    </bean>
+    
+    
+    <!-- 设值注入service组件 -->
+    <!-- action.agent -->
+    <bean id="agentLoginAction" class="com.zhiqi.action.agent.UserLoginAction">
+    	<property name="userService" ref="userService"></property>
+    	<property name="subordinateService" ref="subordinateService"></property>
+    </bean>
+    <bean id="addUser" class="com.zhiqi.action.agent.AddUser">
+    	<property name="userService" ref="userService"></property>
+    	<property name="subordinateService" ref="subordinateService"></property>
+    </bean>
+    <!--   <bean id="loginAllAction" class="com.zhiqi.action.agent.LoginAllAction">
+    	<property name="userService" ref="userService"></property>
+    	<property name="subordinateService" ref="subordinateService"></property>
+    	<property name="superUserService" ref="superUserService"></property>
+    	<property name="cooperaterService" ref="subordinateService"></property>
+    </bean> -->
+    <bean id="updateUserAction" class="com.zhiqi.action.agent.UpdateUserAction">
+    	<property name="userService" ref="userService"></property>
+    </bean>
+    <bean id="updatePasswordAction" class="com.zhiqi.action.agent.UpdatePasswordAction">
+    	<property name="userService" ref="userService"></property>
+    </bean>
+    <bean id="autoRecharge" class="com.zhiqi.action.agent.AutoRecharge">
+    	<property name="userService" ref="userService"></property>
+    </bean>
+    <bean id="reloadSession" class="com.zhiqi.action.agent.ReloadSession">
+    	<property name="userService" ref="userService"></property>
+    </bean>
+	<bean id="billAction" class="com.zhiqi.action.agent.BillAction">
+    	<property name="cashBillService" ref="cashBillService"></property>
+    	<property name="diamondBillService" ref="diamondBillService"></property>
+    </bean>
+    <bean id="diamondRecharge" class="com.zhiqi.action.agent.DiamondRecharge">
+    	<property name="diamondBillService" ref="diamondBillService"></property>
+    	<property name="cashBillService" ref="cashBillService"></property>
+    	<property name="userService" ref="userService"></property>
+    	<property name="subordinateService" ref="subordinateService"></property>
+    </bean>
+    <bean id="rechargeApply" class="com.zhiqi.action.agent.RechargeApply">
+    	<property name="diamondBillService" ref="diamondBillService"></property>
+    	<property name="cashBillService" ref="cashBillService"></property>
+    	<property name="userService" ref="userService"></property>
+    	<property name="subordinateService" ref="subordinateService"></property>
+    </bean>
+    <bean id="rechargeApplyNum" class="com.zhiqi.action.agent.RechargeApplyNum">
+    	<property name="diamondBillService" ref="diamondBillService"></property>
+    	<property name="subordinateService" ref="subordinateService"></property>
+    </bean>
+    <bean id="subordinateAction" class="com.zhiqi.action.agent.SubordinateAction">
+    	<property name="subordinateService" ref="subordinateService"></property>
+    	<property name="diamondBillService" ref="diamondBillService"></property>
+    </bean>
+    <bean id="subordinatePage" class="com.zhiqi.action.agent.SubordinatePage">
+    	<property name="subordinateService" ref="subordinateService"></property>
+    	<property name="diamondBillService" ref="diamondBillService"></property>
+    </bean>
+    <bean id="removeBinding" class="com.zhiqi.action.agent.RemoveBinding">
+    	<property name="subordinateService" ref="subordinateService"></property>
+    </bean>
+    
+    <!-- action.cooperater -->
+    <bean id="userPage" class="com.zhiqi.action.cooperater.UserPage">
+    	<property name="userService" ref="userService"></property>
+    	<property name="subordinateService" ref="subordinateService"></property>
+    	<property name="diamondBillService" ref="diamondBillService"></property>
+    </bean>
+    <bean id="userInfo" class="com.zhiqi.action.cooperater.UserInfo">
+    	<property name="userService" ref="userService"></property>
+    </bean>
+    <bean id="caddUser" class="com.zhiqi.action.cooperater.AddUser">
+    	<property name="userService" ref="userService"></property>
+    	<property name="subordinateService" ref="subordinateService"></property>
+    </bean>
+    <bean id="news" class="com.zhiqi.action.cooperater.News">
+    	<property name="newsInfoService" ref="newsInfoService"></property>
+    </bean>
+    <bean id="notice" class="com.zhiqi.action.cooperater.NoticeA">
+    	<property name="noticeService" ref="noticeService"></property>
+    </bean>
+    
+    
+    <!-- action.cooperater -->
+    <bean id="anews" class="com.zhiqi.action.admin.News">
+    	<property name="newsInfoService" ref="newsInfoService"></property>
+    </bean>
+    <bean id="noticec" class="com.zhiqi.action.admin.NoticeC">
+    	<property name="noticeService" ref="noticeService"></property>
+    </bean>
+</beans>

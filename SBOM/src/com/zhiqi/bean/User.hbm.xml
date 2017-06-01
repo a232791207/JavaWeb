@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-12-15 12:07:42 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+	
+    <class name="com.zhiqi.bean.User" table="user">
+        <id name="userName" type="java.lang.String">
+            <column name="userName" />
+            <generator class="assigned" />
+        </id>
+        <property name="id" type="java.lang.String">
+            <column name="id" />
+        </property>
+        <property name="icon" type="java.sql.Blob">
+            <column name="icon" />
+        </property>
+        <property name="nickName" type="java.lang.String">
+            <column name="nickName" />
+        </property>
+        <property name="realName" type="java.lang.String">
+            <column name="realName" />
+        </property>
+        <property name="idNum" type="java.lang.String">
+            <column name="idNum" />
+        </property>
+        <property name="phoneNum" type="java.lang.String">
+            <column name="phoneNum" />
+        </property>
+        <property name="email" type="java.lang.String">
+            <column name="email" />
+        </property>
+        <property name="loginPassword" type="java.lang.String">
+            <column name="loginPassword" />
+        </property>
+        <property name="payPassword" type="java.lang.String">
+            <column name="payPassword" />
+        </property>
+        <property name="bankCode" type="java.lang.String">
+            <column name="bankCode" />
+        </property>
+        <property name="address" type="java.lang.String">
+            <column name="address" />
+        </property>
+        <property name="region" type="java.lang.String">
+            <column name="region" />
+        </property>
+        <property name="registTime" type="java.lang.String">
+            <column name="registTime" />
+        </property>
+        <property name="recentTime" type="java.lang.String">
+            <column name="recentTime" />
+        </property>
+        <property name="balance" type="java.lang.Double">
+            <column name="balance" />
+        </property>
+        <property name="diamond" type="java.lang.Integer">
+            <column name="diamond" />
+        </property>
+        <property name="level" type="java.lang.Short">
+            <column name="level" />
+        </property>
+        <property name="autoRecharge" type="java.lang.Integer">
+            <column name="autoRecharge" />
+        </property>
+    </class>
+</hibernate-mapping>

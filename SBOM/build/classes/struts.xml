@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+
+<struts>
+	<constant name="struts.enable.DynamicMethodInvocation" value="true" /> 
+	<constant name="struts.multipart.saveDir" value="/tmp"/>
+    <package name="agent" namespace="/pages/agent" extends="struts-default">
+    	<action name="userLogin" class="com.zhiqi.action.agent.LoginAllAction" method="login">
+    		<result name="success">/pages/agent/index.jsp</result>
+    		<result name="false">/pages/login.jsp</result>
+    		<result name="complete">/pages/agent/complete.jsp</result>
+    		<result name="super">/pages/admin/index.jsp</result>
+    		<result name="cooperater">/pages/cooperater/index.jsp</result>
+    	</action>
+    	<action name="userLogout" class="com.zhiqi.action.agent.UserLogoutAction">
+    		<result name="success">/pages/agent/login.jsp</result>
+    	</action>
+    	<action name="findById" class="com.zhiqi.action.agent.UserFindById" method="findByUserId">
+    		<result name="find">/pages/agent/createFuguanzhu.jsp</result>
+
+    	</action>
+    	<action name="judgeRequest" class="com.zhiqi.action.agent.judgeRequestAction" method="judge">
+    		<result name="yi">/pages/agent/login2.jsp</result>
+            <result name="pc">/pages/loginagent.jsp</result>
+    	</action>
+    	<action name="userAgentLogin" class="com.zhiqi.action.agent.UserLoginAction" method="execute">
+    		<result name="success">/pages/agent/index.jsp</result>
+    		<result name="false">/pages/agent/login.jsp</result>
+    	</action>
+    	 <action name="userAgentLogin2" class="com.zhiqi.action.agent.UserLoginAction" method="execute">
+    		<result name="success">/pages/agent/index2.jsp</result>
+    		<result name="false">/pages/agent/login2.jsp</result>
+    	</action>
+    	<action name="updateUser" class="com.zhiqi.action.agent.UpdateUserAction">
+    		<result name="success" type="redirect">/pages/agent/profile.jsp</result>
+    	</action>
+    	<action name="updatePassword" class="com.zhiqi.action.agent.UpdatePasswordAction">
+    		<result name="login" >/pages/agent/updateLoginPassword.jsp</result>
+    		<result name="pay" >/pages/agent/updatePayPassword.jsp</result>
+    	</action>
+    	<action name="addUser" class="com.zhiqi.action.agent.AddUser">
+    		<interceptor-ref name="token"></interceptor-ref>
+    		<interceptor-ref name="defaultStack"></interceptor-ref>
+    		<result name="success" >/pages/agent/createFuguanzhu.jsp</result>
+    	</action>
+    	<action name="reloadSession" class="com.zhiqi.action.agent.ReloadSession" method="reload">
+    	</action>
+  <!--   		<action name="logOut " class="com.zhiqi.action.agent.UserLogoutAction">
+    		  <result name="success">/pages/login.jsp</result>
+    	    </action> -->
+    	<action name="billAction" class="com.zhiqi.action.agent.BillAction">
+    		<result name="cashbillpage">/pages/agent/cashBill.jsp</result>
+    		<result name="diamondbillpage">/pages/agent/diamondBill.jsp</result>
+    	</action>
+    	<action name="billAction2" class="com.zhiqi.action.agent.BillAction">
+    		<result name="cashbillpage">/pages/agent/cashBill.jsp</result>
+    		<result name="diamondbillpage">/pages/agent/wallet2.jsp</result>
+    	</action>
+    	<action name="diamondRecharge" class="com.zhiqi.action.agent.DiamondRecharge">
+    		<interceptor-ref name="token"></interceptor-ref>
+    		<interceptor-ref name="defaultStack"></interceptor-ref>
+    		<result name="userrecharge">/pages/agent/diamondRecharge.jsp</result>
+    		<result name="invalid.token">/pages/agent/error.jsp</result>
+    	</action>
+    	<action name="diamondRecharge2" class="com.zhiqi.action.agent.DiamondRecharge">
+    		<interceptor-ref name="token"></interceptor-ref>
+    		<interceptor-ref name="defaultStack"></interceptor-ref>
+    		<result name="userrecharge">/pages/agent/diamondRecharge.jsp</result>
+    		<result name="invalid.token">/pages/agent/error.jsp</result>
+    	</action>
+    	<action name="autoRecharge" class="com.zhiqi.action.agent.AutoRecharge" method="changeAutoRecharge">
+    	</action>
+    	
+    	<action name="subordinateAction" class="com.zhiqi.action.agent.SubordinateAction" method="overview"></action>
+    	<action name="rechargeApplyNum" class="com.zhiqi.action.agent.RechargeApplyNum" method="num"></action>
+    	
+    	<action name="subordinatePage" class="com.zhiqi.action.agent.SubordinatePage">
+    		<result name="success">/pages/agent/subordinate.jsp</result>
+    		<result name="successes">/pages/agent/subordinate3.jsp</result>
+    		<result name="subordinatelist">/pages/agent/subordinate2.jsp</result>
+    		<result name="subordinatelist2">/pages/agent/subordinate4.jsp</result>
+    	</action>
+    	<action name="subordinatePage2" class="com.zhiqi.action.agent.SubordinatePage">
+    		<result name="success">/pages/agent/user2.jsp</result>
+    		<result name="successes">/pages/agent/user2.jsp</result>
+    		<result name="subordinatelist">/pages/agent/user2.jsp</result>
+    		<result name="subordinatelist2">/pages/agent/user2.jsp</result>
+    	</action>
+    	<action name="rechargeApply" class="com.zhiqi.action.agent.RechargeApply">
+    		<interceptor-ref name="token">
+    			<param name="includeMethods">accept</param>
+    		</interceptor-ref>
+    		<interceptor-ref name="defaultStack"></interceptor-ref>
+    		<result name="success">/pages/agent/rechargeApply.jsp</result>
+    		<result name="applyed">/pages/agent/rechargeApplyed.jsp</result>
+    		<result name="invalid.token">/pages/agent/error.jsp</result>
+    	</action>
+    	<action name="rechargeApply2" class="com.zhiqi.action.agent.RechargeApply">
+    		<interceptor-ref name="token">
+    			<param name="includeMethods">accept</param>
+    		</interceptor-ref>
+    		<interceptor-ref name="defaultStack"></interceptor-ref>
+    		<result name="success">/pages/agent/userRecharge2.jsp</result>
+    		<result name="applyed">/pages/agent/userRecharge2.jsp</result>
+    		<result name="invalid.token">/pages/userRecharge2.jsp</result>
+    	</action>
+    	<action name="removeBinding" class="com.zhiqi.action.agent.RemoveBinding">
+    		<result name="remove">/pages/agent/subordinate.jsp</result>
+    	</action>
+    </package>
+    
+    <package name="cooperater" namespace="/pages/cooperater" extends="struts-default">
+    	<action name="userPage" class="com.zhiqi.action.cooperater.UserPage">
+    		<result name="adsuccess">/pages/admin/userList.jsp</result>
+    		<result name="cosuccess">/pages/cooperater/userList.jsp</result>
+    	</action>
+    	<action name="cooperaterLogin" class="com.zhiqi.action.cooperater.CooperaterLogin" method="execute">
+    		<result name="success">/pages/login.jsp</result>
+    	</action>
+    	<action name="userInfo" class="com.zhiqi.action.cooperater.UserInfo">
+    		<result name="success">/pages/cooperater/profile.jsp</result>
+    	</action>
+    	<action name="addUser" class="com.zhiqi.action.cooperater.AddUser">
+    		<interceptor-ref name="token"></interceptor-ref>
+    		<interceptor-ref name="defaultStack"></interceptor-ref>
+    		<result name="adsuccess" >/pages/admin/createAgent.jsp</result>
+    		<result name="cosuccess" >/pages/cooperater/createAgent.jsp</result>
+    	</action>
+    	<action name="news" class="com.zhiqi.action.cooperater.News">
+    		<result name="news" >/pages/cooperater/addNews.jsp</result>
+    		<result name="ads" >/pages/cooperater/addADS.jsp</result>
+    	</action>
+    	<action name="notice" class="com.zhiqi.action.cooperater.NoticeA">
+    		<result name="coupload" >/pages/cooperater/addNotice.jsp</result>
+    		<result name="adupload" >/pages/admin/addNotice.jsp</result>
+    		<result name="conoticepage" >/pages/cooperater/noticePage.jsp</result>
+    		<result name="adnoticepage" >/pages/admin/noticePage.jsp</result>
+    		<result name="conoticepage2" >/pages/cooperater/noticePage2.jsp</result>
+    		<result name="adnoticepage2" >/pages/admin/noticePage2.jsp</result>
+    		<result name="agnoticepage2" >/pages/agent/noticePage2.jsp</result>
+    		<result name="conoticeinfo" >/pages/cooperater/notice.jsp</result>
+    		<result name="adnoticeinfo" >/pages/admin/notice.jsp</result>
+    		<result name="agnoticeinfo" >/pages/agent/notice.jsp</result>
+    	</action>
+    </package>
+    <package name="admin" namespace="/pages/admin" extends="struts-default">
+    	<action name="news" class="com.zhiqi.action.admin.News">
+    		<result name="news" >/pages/admin/addNews.jsp</result>
+    		<result name="ads" >/pages/admin/addADS.jsp</result>
+    	</action>
+    	<action name="notice" class="com.zhiqi.action.admin.NoticeC">
+    		<result name="success">/pages/admin/noticePage.jsp</result>
+    	</action>
+    	<action name="toexamine" class="com.zhiqi.action.admin.ToExamineNews" method="toExamine">
+    		<result name="news">/pages/admin/checkNews.jsp</result>
+    	</action>
+    	<action name="updateNews" class="com.zhiqi.action.admin.ToExamineNews" method="upNews">
+    		<result name="upnews">/pages/admin/index.jsp</result>
+    	</action>
+    	<action name="updateAdvertisement" class="com.zhiqi.action.admin.ToExamineNews" method="toExamineAdvertisement">
+    		<result name="advertisement">/pages/admin/checkADS.jsp</result>
+    	</action>
+    	<action name="upAdvertisement" class="com.zhiqi.action.admin.ToExamineNews" method="upAdvertisement">
+    		<result name="upAdvertisement">/pages/admin/index.jsp</result>
+    	</action>
+    	<action name="out" class="com.zhiqi.action.admin.AdminLogin" >
+    		<result name="success">/pages/login.jsp</result>
+    	</action>
+    </package>
+    <package name="agent" namespace="/pages/agents" extends="struts-default">
+         
+      </package>
+</struts>
