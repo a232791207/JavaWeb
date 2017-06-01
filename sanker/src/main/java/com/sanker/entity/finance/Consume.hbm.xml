@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.sanker.entity.finance">
+	<class name="Consume" table="consume">
+		<id name="id">
+			<column name="id" />
+			<generator class="uuid"></generator>
+		</id>
+		<property name="playerId" type="string"/>
+		<property name="amount" type="double"/>
+		<property name="purpose" type="string"/>
+		<property name="consumeTime"/>
+	</class>
+</hibernate-mapping>

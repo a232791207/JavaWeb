@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.sanker.entity.player">
+	<class name="Player" table="player">
+		<id name="id">
+			<column name="id" />
+			<generator class="uuid"></generator>
+		</id>
+		<property name="playerId" type="integer" />
+		<property name="weiXinCode" type="string"/>
+		<property name="weiXinNickName" type="string"/>
+		<property name="sex" type="character"/>
+		<property name="phone" type="string"/>
+		<property name="diamonds" type="integer"/>
+		<property name="gold" type="integer"/>
+		<property name="charm" type="integer"/>
+		<property name="level" type="string"/>
+		<property name="status" type="integer"/>
+		<property name="headImgUrl" type="string"/>
+		<property name="city" type="string"/>
+		<property name="continuityWin" type="integer"/>
+		<property name="score" type="integer"/>
+		<property name="lastWeekScore" type="integer"/>
+		<property name="achievement" type="integer"/>
+		<property name="registerDate"/>
+	</class>
+</hibernate-mapping>

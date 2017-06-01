@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xsi:schemaLocation="
+		    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+		    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+		    http://cxf.apache.org/jaxws  http://cxf.apache.org/schemas/jaxws.xsd"
+	default-autowire="byName">
+
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+	<bean id="springContextUtil" class="com.sanker.service.utils.SpringContextUtil" />
+
+	<!-- Service -->
+	
+	<bean id="PlayerService" class="com.sanker.service.player.PlayerService"/>
+	<!-- 好友 -->
+	<bean id="PlayerRelationService" class="com.sanker.service.player.PlayerRelationService"/>
+	<!-- 充值 -->
+	<bean id="RechargeService" class="com.sanker.service.finance.RechargeService"/>
+	<!-- 消费 -->
+	<bean id="ConsumService" class="com.sanker.service.finance.ConsumService"/>
+	<!-- 送礼 -->
+	<bean id="GiftGivingService" class="com.sanker.service.gift.GiftGivingService"/>
+	<!-- 通知 -->
+	<bean id="InformService" class="com.sanker.service.inform.InformService"/>
+	<!-- 邮件 -->
+	<bean id="MailService" class="com.sanker.service.inform.MailService"/>
+	<!-- 房间 -->
+	<bean id="GameRoomService" class="com.sanker.service.game.GameRoomService"/>
+	<!-- 回合 -->
+	<bean id="RoundService" class="com.sanker.service.game.RoundService"/>
+	<!-- 战绩 -->
+	<bean id="GameRecordService" class="com.sanker.service.game.GameRecordService"/>
+	<!-- 模板 -->
+	<bean id="TemplateService" class="com.sanker.service.template.TemplateService"/>
+	<!-- 流水 -->
+	<bean id="LedgerService" class="com.sanker.service.game.LedgerService"/>
+	<!-- 地域次数 -->
+	<bean id="GameAreaNumService" class="com.sanker.service.game.GameAreaNumService"/>
+	
+	<!-- 点赞状态定时清除 -->
+	<bean id="KnoqueTask" class="com.sanker.task.KnoqueTask"/>
+	<!-- Service end -->
+
+</beans>

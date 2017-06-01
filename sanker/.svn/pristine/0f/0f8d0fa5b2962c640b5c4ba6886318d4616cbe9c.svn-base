@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.sanker.entity.game">
+	<class name="GameAreaNum" table="gameAreaNum">
+		<id name="id">
+			<column name="id" />
+			<generator class="uuid"></generator>
+		</id>
+		<property name="playerId" type="string"/>
+		<property name="chengDu" type="integer"/>
+		<property name="langZhong" type="integer"/>
+		<property name="luZhou" type="integer"/>
+		<property name="guangAn" type="integer"/>
+		<property name="neiJiang" type="integer"/>
+		<property name="xiChang" type="integer"/>
+		<property name="yiBin" type="integer"/>
+		<property name="ziGong" type="integer"/>
+	</class>
+</hibernate-mapping>

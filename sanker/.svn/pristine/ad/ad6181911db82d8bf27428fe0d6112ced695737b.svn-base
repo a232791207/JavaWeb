@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<constant name="struts.action.extension" value="action" />
+	<constant name="struts.i18n.encoding" value="utf-8"></constant>
+	<constant name="struts.enable.SlashesInActionNames" value="true"></constant>
+	<constant name="struts.objectFactory" value="spring" />
+	<!-- <constant name="struts.devMode" value="true"></constant> -->
+	<constant name="struts.objectFactory.spring.autoWire" value="name" />
+	<constant name="struts.multipart.maxSize" value="1000000000" />
+	<package name="default" namespace="/" extends="struts-default">
+
+		<!-- <action name="jsp/UserInfoAction-*" method="{1}" class="UserInfoAction" /> -->
+		<!-- 登录 -->
+		<action name="knoque/WeixinConfigure_*" method="{1}" class="WeixinConfigure">
+			<result name="gameWeb" type="redirect">gameWeb/v1/index.html${preURL}</result>
+			<result name="error1" type="redirect">index.jsp</result>
+		</action>
+		<!-- 玩家 -->
+		<action name="knoque/PlayerAction_*" method="{1}" class="PlayerAction"/>
+		<!-- 模板 -->
+		<action name="knoque/TemplateAction_*" method="{1}" class="TemplateAction"/>
+		<!-- 邮件 -->
+		<action name="knoque/MailAction_*" method="{1}" class="MailAction"/>
+		<!-- 流水 -->
+		<action name="knoque/LedgerAction_*" method="{1}" class="LedgerAction"/>
+	</package>
+</struts>

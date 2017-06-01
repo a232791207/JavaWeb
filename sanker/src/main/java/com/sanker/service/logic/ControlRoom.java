@@ -1,0 +1,305 @@
+package com.sanker.service.logic;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.springframework.web.context.ContextLoader;
+
+import com.sanker.entity.game.GameRoom;
+
+/**
+ * 对局 信息（所有的游戏在线数据）
+ * 
+ * @author 滕洁
+ * @date 2016-11-29
+ */
+public class ControlRoom {
+
+	/**
+	 * 所有的好友房 房间
+	 */
+	public static List<String> friendRoom = new ArrayList<String>();// 好友房
+
+	/**
+	 * //金币 key1 区域 key2 玩法类型（血流、血战） key3 底分 中所有的房间
+	 */
+	public static Map<String, Map<Integer, Map<Integer, List<String>>>> goldRoom = new LinkedHashMap<>();
+
+	/**
+	 * 对局中的玩家
+	 */
+	// public static Map<String, List<String>> gameRoom = new
+	// LinkedHashMap<String, List<String>>();
+
+	/**
+	 * 牌局 key:roomId
+	 */
+	public static Map<String, Logic> allLogic = new HashMap<String, Logic>();
+
+	/**
+	 * 用来保存牌局规则 key:roomId
+	 */
+	public static Map<String, GameRoom> roomRule = new HashMap<>();
+	
+	/**
+	 * 玩家在对局中的信息
+	 */
+	public static Map<String, Map<String, Map<String, Object>>> player_room_info = new HashMap<>();
+
+	/**
+	 * 玩家缺的牌 key：playerId
+	 */
+	public static Map<String, String> quePaiMap = new HashMap<String, String>();
+	/**
+	 * 1 roomId 2 playerId  3 癞子数
+	 */
+	public static Map<String, Map<String, Integer>> laizi = new HashMap<String, Map<String, Integer>>();
+	/**
+	 * 牌局中完成选缺的玩家
+	 */
+	public static Map<String, Map<String, String>> queChoosed = new HashMap<String, Map<String, String>>();
+
+	/**
+	 * 在一局中，有玩家打出一张牌。能操作的玩。key1：roomId key2:canhu/canGang/cangPeng...
+	 */
+	public static Map<String, Map<String, List<String>>> caoZuoNum = new HashMap<String, Map<String, List<String>>>();
+
+	/**
+	 * 杠牌类型 key1 roomId key2 playerId key3 pai
+	 */
+	public static Map<String, Map<String, Map<String, String>>> gangType = new HashMap<String, Map<String, Map<String, String>>>();
+
+	/**
+	 * 一局牌中已经和牌的玩家
+	 */
+	public static Map<String, List<String>> huPlayer = new HashMap<String, List<String>>();
+
+	/**
+	 * 听用 保存当局的 的本金
+	 */
+	public static Map<String, String> benJin = new HashMap<String, String>();
+
+	/**
+	 * 保存玩家和牌后的番数详情
+	 */
+	//public static Map<String, String> playerMultiple = new HashMap<String, String>();
+
+	/**
+	 * 好友场中当前的对局数
+	 */
+	public static Map<String, Integer> friendGameNum = new HashMap<String, Integer>();
+
+	/**
+	 * 下一局 时，已点击btn_next的玩家
+	 */
+	public static Map<String, List<String>> nextRoom = new HashMap<String, List<String>>();
+
+	/**
+	 * 临时，保存每个玩家的性别 没次进入房间添加，退出游戏移除
+	 */
+	public static Map<String, String> playerSex = new HashMap<String, String>();
+
+	/**
+	 * 好友房中玩家积分
+	 */
+	public static Map<String, Map<String, Integer>> friendsScore = new HashMap<String, Map<String, Integer>>();
+
+	/**
+	 * 牌局中玩家的相对位置 南 东 北 西
+	 */
+	public static Map<String, Map<String, String>> gamePlayerPosition = new HashMap<String, Map<String, String>>();
+
+	/**
+	 * 步骤记录 key:roomId value: title/playerId/position/pai —— json
+	 */
+	public static Map<String, List<String>> stepRecord = new HashMap<String, List<String>>();
+
+	/**
+	 * 默认地址
+	 */
+	public static List<String> gameAreaList = ControlRoom.initGameAreaList();
+
+	/**
+	 * 选择摆的用户
+	 */
+	public static List<String> baiPlayer = new ArrayList<String>();
+
+	/**
+	 * 选择飘的用户
+	 */
+	public static Map<String, Map<String, String>> piaoPlayer = new HashMap<String, Map<String, String>>();
+
+	/***
+	 * 每局中玩家的additional
+	 */
+	public static Map<String, Map<String, String>> playerAdditional = new HashMap<String, Map<String, String>>();
+
+	/**
+	 * 换三张
+	 */
+	public static Map<String, Map<String, int[]>> swapArray = new HashMap<>();
+
+	/**
+	 * 好友房 选庄
+	 */
+	public static Map<String, String> bankerMap = new HashMap<>();
+	public static Map<String, String> this_banker = new HashMap<>();
+	
+	/**
+	 * 好友房解散申请
+	 */
+	public static Map<String, LinkedHashMap<String, String>> js_roomPlayer = new HashMap<>();
+	
+	/**
+	 * 选择退出的玩家
+	 */
+	public static Map<String, List<String>> exit_room_players = new HashMap<>();
+
+	/**
+	 * 好友房
+	 */
+
+	/**
+	 * 获取步骤记录的json return : title、playerId、position、pai
+	 */
+	public static String getStepJson(String roomId, String playerId, String pai, String title) {
+
+		return "{\"title\":\"" + title + "\",\"playerId\":\"" + playerId + "\"," + "\"position\":\"" + ControlRoom.getDirection(roomId, playerId) + "\",\"pai\":\"" + pai + "\"}";
+
+	}
+
+	public static List<String> initGameAreaList() {
+		List<String> list = new ArrayList<String>();
+		list.add("chengDu");
+		list.add("ziGong");
+		list.add("yiBin");
+		list.add("guangAn");
+		list.add("langZhong");
+		list.add("luZhou");
+		list.add("neiJiang");
+		list.add("xiChang");
+		list.add("deYang");
+		
+		return list;
+	}
+
+	/**
+	 * 获取service
+	 */
+	public static Object getServiceBean(String name) {
+
+		return ContextLoader.getCurrentWebApplicationContext().getBean(name);
+	}
+
+	/**
+	 * 获取玩家相对位置
+	 */
+	public static String getRelativePosition(String roomId, String playerId, String otherPlayerId) {
+		String playerPosition = ControlRoom.getDirection(roomId, playerId);
+		String otherPosition = ControlRoom.getDirection(roomId, otherPlayerId);
+		if (playerPosition.equals("south")) {
+			if (otherPosition.equals("east")) {
+				return "right";
+			} else if (otherPosition.equals("north")) {
+				return "opposite";
+			} else if (otherPosition.equals("west")) {
+				return "left";
+			}
+		} else if (playerPosition.equals("east")) {
+			if (otherPosition.equals("north")) {
+				return "right";
+			} else if (otherPosition.equals("west")) {
+				return "opposite";
+			} else if (otherPosition.equals("south")) {
+				return "left";
+			}
+		} else if (playerPosition.equals("north")) {
+			if (otherPosition.equals("west")) {
+				return "right";
+			} else if (otherPosition.equals("south")) {
+				return "opposite";
+			} else if (otherPosition.equals("east")) {
+				return "left";
+			}
+		} else if (playerPosition.equals("west")) {
+			if (otherPosition.equals("south")) {
+				return "right";
+			} else if (otherPosition.equals("east")) {
+				return "opposite";
+			} else if (otherPosition.equals("north")) {
+				return "left";
+			}
+		}
+		return null;
+	}
+
+	/*
+	 * 根据相对位置获取 上家/下家 。。
+	 */
+	public static String getMjPosition(String relativePosition) {
+		if (relativePosition.equals("right")) {
+			return "下家";
+		} else if (relativePosition.equals("opposite")) {
+			return "对家";
+		} else if (relativePosition.equals("left")) {
+			return "上家";
+		} else {
+			return relativePosition;
+		}
+	}
+
+	/**
+	 * 根据玩家Id获取绝对位置
+	 */
+	public static String getDirection(String roomId, String playerId) {
+		for (Map.Entry<String, String> entry : ControlRoom.gamePlayerPosition.get(roomId).entrySet()) {
+			if (entry.getValue().equals(playerId))
+				return entry.getKey();
+		}
+		return null;
+	}
+
+	/**
+	 * 根据value对map进行降序排序 返回 key List
+	 */
+	public static List<String> sortMapByValue(Map<String, Integer> map) {
+
+		// 这里将map.entrySet()转换成list
+		List<Map.Entry<String, Integer>> list = new ArrayList<Map.Entry<String, Integer>>(map.entrySet());
+		// 然后通过比较器来实现排序
+		Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+			// 升序排序
+			public int compare(Entry<String, Integer> o1, Entry<String, Integer> o2) {
+				return o2.getValue().compareTo(o1.getValue());
+			}
+
+		});
+		List<String> reList = new ArrayList<String>();
+		for (Map.Entry<String, Integer> mapping : list) {
+			reList.add(mapping.getKey());
+		}
+
+		return reList;
+
+	}
+
+	/**
+	 * list 中是否不止含有指定元素
+	 */
+	public static boolean noAllHavaElement(List<Integer> list, Integer obj) {
+		boolean flag = false;
+		for (Integer integer : list) {
+			if (integer != 0) {
+				flag = true;
+			}
+		}
+		return flag;
+	}
+
+}

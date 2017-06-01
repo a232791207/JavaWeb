@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.sanker.entity.player">
+	<class name="PlayerGameInfo" table="player_gameInfo">
+		<id name="id">
+			<column name="id" />
+			<generator class="native"></generator>
+		</id>
+		<property name="playerId" type="string"/>
+		<property name="trophy1" type="integer"/>
+		<property name="trophy2" type="integer"/>
+		<property name="trophy3" type="integer"/>
+		<property name="matchT1" type="integer"/>
+		<property name="matchT2" type="integer"/>
+		<property name="matchT3" type="integer"/>
+		<property name="gameNum" type="integer"/>
+		<property name="winNum" type="integer"/>
+		<property name="continuityWin" type="integer"/>
+		<property name="maxMultiple" type="integer"/>
+		<property name="maxMultipleStr" type="string"/>
+	</class>
+</hibernate-mapping>

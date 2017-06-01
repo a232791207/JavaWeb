@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.sanker.entity.game">
+	<class name="GameRoom" table="gameRoom">
+		<id name="id">
+			<column name="id" />
+			<generator class="uuid"></generator>
+		</id>
+		<property name="roomId" type="integer" />
+		<property name="houseOwnerId" type="string"/>
+		<property name="type" type="integer"/>
+		<property name="gameType" type="integer"/>
+		<property name="gameNum" type="integer"/>
+		<property name="playerNum" type="integer"/>
+		<property name="gameArea" type="string"/>
+		<property name="rule" type="string"/>
+		<property name="createTime"/>
+		<property name="baseScore" type="integer"/>
+		<property name="topMultiple" type="integer"/>
+	</class>
+</hibernate-mapping>

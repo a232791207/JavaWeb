@@ -1,0 +1,11 @@
+package com.sanker.service.logic;
+/**
+ * 乱清和牌算法
+ * @author 滕洁
+ * @date 2016-11-8
+ */
+public class LuanQingLogic {
+	
+	
+
+}

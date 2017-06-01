@@ -1,0 +1,275 @@
+package com.sanker.action;
+
+import java.io.IOException;
+import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.struts2.ServletActionContext;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.springframework.core.io.ClassPathResource;
+
+import com.opensymphony.xwork2.ActionSupport;
+import com.sanker.service.utils.JSONHelper;
+import com.sanker.service.utils.PageVO;
+import com.sanker.service.utils.XmlUtil;
+
+public class BaseAction extends ActionSupport {
+	private static final long serialVersionUID = 1L;
+	public static String EDIT = "edit";
+	public static String ADD = "add";
+	public static String LIST = "list";
+
+	public String getPage() {
+		return page;
+	}
+
+	public void setPage(String page) {
+		this.page = page;
+	}
+
+	public String getSidx() {
+		return sidx;
+	}
+
+	public void setSidx(String sidx) {
+		this.sidx = sidx;
+	}
+
+	public String getSord() {
+		return sord;
+	}
+
+	public void setSord(String sord) {
+		this.sord = sord;
+	}
+
+	public String getRows() {
+		return rows;
+	}
+
+	public void setRows(String rows) {
+		this.rows = rows;
+	}
+
+	private String page;
+	private String sidx;
+	private String sord;
+	private String rows;
+	/**
+	 * 项目路径
+	 */
+	public static String CONTEXT_PATH = ServletActionContext.getServletContext().getRealPath("/");
+
+	protected Integer getIId() {
+		return getInteger("id");
+	}
+
+	public BaseAction() {
+		super();
+	}
+
+	public HttpServletRequest getRequest() {
+		return ServletActionContext.getRequest();
+	}
+
+	public HttpServletResponse getResponse() {
+		return ServletActionContext.getResponse();
+	}
+
+	public void Write(HttpServletResponse res, String json) {
+		System.out.println(res.getHeader(SUCCESS));
+		System.out.println("++++++======>>>>");
+		res.setCharacterEncoding("UTF-8");
+		res.setHeader("Cache-Control", "no-cache");
+		res.setHeader("Access-Control-Allow-Origin", "*");
+//		res.setHeader("Access-Control-Allow-Origin", "http://www.majiang201.com");
+//		res.setHeader("Access-Control-Allow-Origin", "http://www.knoque.cn:8080");
+		res.setContentType("text/html");
+		Writer writer;
+		try {
+			
+			writer = res.getWriter();
+			writer.write(json);
+			writer.flush();
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void Write(String json) {
+		Write(getResponse(), json);
+	}
+
+	protected String getRealPath(String p) {
+		return ServletActionContext.getServletContext().getRealPath(p);
+	}
+
+	protected Integer getInteger(String name) {
+		String p = getString(name);
+		if (p != null && !"".equals(p)) {
+			try {
+				return Integer.parseInt(p);
+			} catch (Exception e) {
+				return new Integer(0);
+			}
+		}
+		return new Integer(0);
+	}
+
+	protected Long getLong(String name) {
+		String p = getString(name);
+		if (p != null && !"".equals(p)) {
+			try {
+				return Long.parseLong(p);
+			} catch (Exception e) {
+				return new Long(0);
+			}
+		}
+		return new Long(0);
+	}
+
+	protected String getString(String name) {
+		return getRequest().getParameter(name);
+	}
+
+	protected Double getDouble(String name) {
+		try {
+			return Double.parseDouble(getString(name));
+		} catch (Exception e) {
+			return new Double(0l);
+		}
+	}
+
+	protected Integer getId() {
+		return getInteger("id");
+	}
+
+	/**
+	 * 根据节点名称从filePath.xml中获取文件路径
+	 * 
+	 * @param nodeName
+	 * @return
+	 * @throws DocumentException
+	 * @throws IOException
+	 */
+	protected String getFileDir(String nodeName) throws DocumentException, IOException {
+		Document document = XmlUtil.getDocument(new ClassPathResource("filePath.xml").getFile());
+		Element root = XmlUtil.getRoot(document);
+		return XmlUtil.getElementTextByName(root, nodeName);
+	}
+
+	/**
+	 * 获取项目路径
+	 * 
+	 * @return
+	 * @throws IOException
+	 */
+	protected String getProjectDir() throws IOException {
+		String path = ServletActionContext.getServletContext().getRealPath("/");
+		System.out.println(path);
+		return path;
+	}
+
+	/**
+	 * 给文件名加一个时间戳，以防文件重名
+	 * 
+	 * @param filename
+	 * @return
+	 */
+	protected String generateFileName(String filename) {
+		String fileName = filename;
+		if (filename != null) {
+			int index = filename.lastIndexOf('.');
+			if (index != -1) {
+				fileName = filename.substring(0, index) + "_" + System.currentTimeMillis() + ".jpg";// filename.substring(index);
+			}
+		}
+
+		return fileName;
+	}
+
+	/**
+	 * 给文件名加一个时间戳，以防文件重名
+	 * 
+	 * @param filename
+	 * @return
+	 */
+	protected String generateFileName(String filename, String reName) {
+		String fileName = filename;
+		if (filename != null) {
+			int index = filename.lastIndexOf('.');
+			if (index != -1) {
+				fileName = reName + "_" + System.currentTimeMillis() + ".jpg";// filename.substring(index);
+			}
+		}
+
+		return fileName;
+	}
+
+	/**
+	 * 给文件名加一个时间戳，以防文件重名
+	 * 
+	 * @param filename
+	 * @return
+	 */
+	protected String generateVideoName(String filename, String reName) {
+		String fileName = filename;
+		if (filename != null) {
+			int index = filename.lastIndexOf('.');
+			if (index != -1) {
+				fileName = reName + "_" + System.currentTimeMillis() + filename.substring(index);
+			}
+		}
+
+		return fileName;
+	}
+
+	protected String getJson(@SuppressWarnings("rawtypes") PageVO pageVO) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("page", pageVO.getPage());
+		map.put("pageSize", pageVO.getPageSize());
+		map.put("rows", pageVO.getRows());
+		map.put("records", pageVO.getRecords());
+		map.put("total", pageVO.getTotal());
+		return JSONHelper.SerializeWithNeedAnnotation(map);
+	}
+
+	protected String getJson(String result, Object obj) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("result", result);
+		map.put("data", obj);
+		return JSONHelper.SerializeWithNeedAnnotation(map);
+	}
+
+	protected String getJson(String result, Object obj, String dateDattern) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("result", result);
+		map.put("data", obj);
+		if (StringUtils.isEmpty(dateDattern)) {
+			dateDattern = "yyyy-MM-dd HH:mm:ss";
+		}
+		return JSONHelper.toJson(map, dateDattern);
+	}
+
+	/**
+	 * 附件下载
+	 * 
+	 * @return
+	 */
+	public String attdownload() {
+		HttpServletRequest request = ServletActionContext.getRequest();
+		String downPath = "c:/att/file.txt";
+		String fileName = "file.txt";
+		request.setAttribute("downPath", downPath);
+		request.setAttribute("fileName", fileName);
+		return "download";
+	}
+}

@@ -1,0 +1,41 @@
+@CHARSET "UTF-8";
+table.center th,table.center td,h2.center,h3.center{
+	text-align:center;
+}
+.news{
+	font-size:80%;
+	color:#FF0000;
+}
+.left{
+	float:left;
+}
+.cart-button{
+	margin-right:5px;
+	border:none;
+	border-right:1px solid #888888;
+	background-color:#eeeeee;
+}
+.show-button{
+	border:none;
+	background-color:#eeeeee;
+	margin-bottom:4px;
+}
+.cart{
+	margin:2px auto;
+	border:1px solid #a2a2a2;
+	padding-top:5px;
+	width:130px;
+	background-color:#eeeeee;
+	display:inline-block;
+	margin-right:5px;
+}
+.disk{
+	padding-left:8px;
+	height:28px;
+	width:50px;
+}
+input[type="file"]{
+	width:180px;
+	height:28px;
+    display:inline-block !important;
+}

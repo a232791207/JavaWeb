@@ -1,0 +1,28 @@
+package com.test;
+
+import com.sanker.entity.weixin.Access_token;
+
+
+
+public class Test_thead implements Runnable {
+
+	public static Access_token token = null;
+    public void run() {
+        while (true) {
+            try {
+            		token = new Access_token();
+            		token.setAccess_token("123");
+            		token.setExpires_in(6);
+            		System.out.println("c");
+                   Thread.sleep(token.getExpires_in() * 1000);
+            } catch (InterruptedException e) {
+                try {
+                    Thread.sleep(60 * 1000);
+                } catch (InterruptedException e1) {
+                  }
+            }
+        }
+    }
+    
+    
+}

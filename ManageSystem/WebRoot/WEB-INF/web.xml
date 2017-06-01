@@ -1,0 +1,1202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0" 
+	xmlns="http://java.sun.com/xml/ns/javaee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+  <display-name></display-name>
+  <servlet>
+    <servlet-name>AdminLoginServlet</servlet-name>
+    <servlet-class>com.wust.web.AdminLoginServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>ClerkListServlet</servlet-name>
+    <servlet-class>com.wust.web.ClerkListServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>UpdateClerkServlet</servlet-name>
+    <servlet-class>com.wust.web.UpdateClerkServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>DeleteClerkServlet</servlet-name>
+    <servlet-class>com.wust.web.DeleteClerkServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>ClerkInfoServlet</servlet-name>
+    <servlet-class>com.wust.web.ClerkInfoServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>AddClerkServlet</servlet-name>
+    <servlet-class>com.wust.web.AddClerkServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>DistributorListServlet</servlet-name>
+    <servlet-class>com.wust.web.DistributorListServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>AddDistributorServlet</servlet-name>
+    <servlet-class>com.wust.web.AddDistributorServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>DeleteDistributorServlet</servlet-name>
+    <servlet-class>com.wust.web.DeleteDistributorServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>DistributorInfoServlet</servlet-name>
+    <servlet-class>com.wust.web.DistributorInfoServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>UpdateDistributorServlet</servlet-name>
+    <servlet-class>com.wust.web.UpdateDistributorServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>CustomerListServlet</servlet-name>
+    <servlet-class>com.wust.web.CustomerListServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>AddCustomerServlet</servlet-name>
+    <servlet-class>com.wust.web.AddCustomerServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>DeleteCustomerServlet</servlet-name>
+    <servlet-class>com.wust.web.DeleteCustomerServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>CustomerInfoServlet</servlet-name>
+    <servlet-class>com.wust.web.CustomerInfoServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>UpdateCustomerServlet</servlet-name>
+    <servlet-class>com.wust.web.UpdateCustomerServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>ClerkLoginServlet</servlet-name>
+    <servlet-class>com.wust.web.ClerkLoginServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>SelectAreaServlet</servlet-name>
+    <servlet-class>com.wust.web.SelectAreaServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>SelectPriceDirectincServlet</servlet-name>
+    <servlet-class>com.wust.web.SelectPriceDirectincServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>ProductNumServlet</servlet-name>
+    <servlet-class>com.wust.web.ProductNumServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>AddOrderServlet</servlet-name>
+    <servlet-class>com.wust.web.AddOrderServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>OrderListServlet</servlet-name>
+    <servlet-class>com.wust.web.OrderListServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>updatePasswordServlet</servlet-name>
+    <servlet-class>com.wust.web.updatePasswordServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>OrderList2Servlet</servlet-name>
+    <servlet-class>com.wust.web.OrderList2Servlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>UpdateOrderState</servlet-name>
+    <servlet-class>com.wust.web.UpdateOrderState</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>OrderList3Servlet</servlet-name>
+    <servlet-class>com.wust.web.OrderList3Servlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>OrderInfoServlet</servlet-name>
+    <servlet-class>com.wust.web.OrderInfoServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>SelectSalesmanServlet</servlet-name>
+    <servlet-class>com.wust.web.SelectSalesmanServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>SelectDistributorServlet</servlet-name>
+    <servlet-class>com.wust.web.SelectDistributorServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>SelectFormatServlet</servlet-name>
+    <servlet-class>com.wust.web.SelectFormatServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>SelectLevelServlet</servlet-name>
+    <servlet-class>com.wust.web.SelectLevelServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>UpdateOrderServlet</servlet-name>
+    <servlet-class>com.wust.web.UpdateOrderServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>PriceListServlet</servlet-name>
+    <servlet-class>com.wust.web.PriceListServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>PriceInfoServlet</servlet-name>
+    <servlet-class>com.wust.web.PriceInfoServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>UpdatePriceServlet</servlet-name>
+    <servlet-class>com.wust.web.UpdatePriceServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>AddPriceServlet</servlet-name>
+    <servlet-class>com.wust.web.AddPriceServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>BatchUpdatePriceServlet</servlet-name>
+    <servlet-class>com.wust.web.BatchUpdatePriceServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>DirectincListServlet</servlet-name>
+    <servlet-class>com.wust.web.DirectincListServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>DirectincInfoServlet</servlet-name>
+    <servlet-class>com.wust.web.DirectincInfoServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>UpdateDirectincServlet</servlet-name>
+    <servlet-class>com.wust.web.UpdateDirectincServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>SelectPackageNumServlet</servlet-name>
+    <servlet-class>com.wust.web.SelectPackageNumServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>ProductListServlet</servlet-name>
+    <servlet-class>com.wust.web.ProductListServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>AddProductServlet</servlet-name>
+    <servlet-class>com.wust.web.AddProductServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>ProductInfoServlet</servlet-name>
+    <servlet-class>com.wust.web.ProductInfoServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>UpdateProductServlet</servlet-name>
+    <servlet-class>com.wust.web.UpdateProductServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>DeleteProductServlet</servlet-name>
+    <servlet-class>com.wust.web.DeleteProductServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>FindProductServlet</servlet-name>
+    <servlet-class>com.wust.web.FindProductServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>ClerkLogoutServlet</servlet-name>
+    <servlet-class>com.wust.web.ClerkLogoutServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>DraworderListServlet</servlet-name>
+    <servlet-class>com.wust.web.DraworderListServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>AddDraworderServlet</servlet-name>
+    <servlet-class>com.wust.web.AddDraworderServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>findCheckDrawServlet</servlet-name>
+    <servlet-class>com.wust.web.findCheckDrawServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>CheckOrderIdServlet</servlet-name>
+    <servlet-class>com.wust.web.CheckOrderIdServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>CheckDrawPriceServlet</servlet-name>
+    <servlet-class>com.wust.web.CheckDrawPriceServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>PaymentListServlet</servlet-name>
+    <servlet-class>com.wust.web.PaymentListServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>AddDirectincServlet</servlet-name>
+    <servlet-class>com.wust.web.AddDirectincServlet</servlet-class>
+  </servlet>
+    <servlet>
+    <servlet-name>AddInterestServlet</servlet-name>
+    <servlet-class>com.wust.web.AddInterestServlet</servlet-class>
+  </servlet>
+  
+    <servlet>
+    <servlet-name>AddPaybackServlet</servlet-name>
+    <servlet-class>com.wust.web.AddPaybackServlet</servlet-class>
+  </servlet>
+  
+    <servlet>
+    <servlet-name>AddPaymentServlet</servlet-name>
+    <servlet-class>com.wust.web.AddPaymentServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>DeleteDirectincServlet</servlet-name>
+    <servlet-class>com.wust.web.DeleteDirectincServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>DeletePriceServlet</servlet-name>
+    <servlet-class>com.wust.web.DeletePriceServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>ResultListServlet</servlet-name>
+    <servlet-class>com.wust.web.ResultListServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>CheckDrawNumServlet</servlet-name>
+    <servlet-class>com.wust.web.CheckDrawNumServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>CheckDrawSumpriceServlet</servlet-name>
+    <servlet-class>com.wust.web.CheckDrawSumpriceServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>SelectPriceServlet</servlet-name>
+    <servlet-class>com.wust.web.SelectPriceServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>PrintProductServlet</servlet-name>
+    <servlet-class>com.wust.web.PrintProductServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>GetFailOrderNumServlet</servlet-name>
+    <servlet-class>com.wust.web.GetFailOrderNumServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>GetWaitOrderNumServlet</servlet-name>
+    <servlet-class>com.wust.web.GetWaitOrderNumServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>RemainCredServlet</servlet-name>
+    <servlet-class>com.wust.web.RemainCredServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>PrintOrderListForSalesmanServlet</servlet-name>
+    <servlet-class>com.wust.web.PrintOrderListForSalesmanServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>PrintOrderListForTreasurerServlet</servlet-name>
+    <servlet-class>com.wust.web.PrintOrderListForTreasurerServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>PrintOrderListForTreasurer2Servlet</servlet-name>
+    <servlet-class>com.wust.web.PrintOrderListForTreasurer2Servlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>PrintPaymentListServlet</servlet-name>
+    <servlet-class>com.wust.web.PrintPaymentListServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>PrintPriceListServlet</servlet-name>
+    <servlet-class>com.wust.web.PrintPriceListServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>PrintDirectincListServlet</servlet-name>
+    <servlet-class>com.wust.web.PrintDirectincListServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>PrintResultListServlet</servlet-name>
+    <servlet-class>com.wust.web.PrintResultListServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>PrintDraworderListServlet</servlet-name>
+    <servlet-class>com.wust.web.PrintDraworderListServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>PrintCheckdrawListServlet</servlet-name>
+    <servlet-class>com.wust.web.PrintCheckdrawListServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>SelectClerk</servlet-name>
+    <servlet-class>com.wust.web.SelectClerk</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>SelectCustomer</servlet-name>
+    <servlet-class>com.wust.web.SelectCustomer</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>SelectDistributor</servlet-name>
+    <servlet-class>com.wust.web.SelectDistributor</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>FareListServlet</servlet-name>
+    <servlet-class>com.wust.web.FareListServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>BasicFareListServlet</servlet-name>
+    <servlet-class>com.wust.web.BasicFareListServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>AddBasicFareServlet</servlet-name>
+    <servlet-class>com.wust.web.AddBasicFareServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>DeleteBasicFareServlet</servlet-name>
+    <servlet-class>com.wust.web.DeleteBasicFareServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>BasicFareInfoServlet</servlet-name>
+    <servlet-class>com.wust.web.BasicFareInfoServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>UpdateBasicFareServlet</servlet-name>
+    <servlet-class>com.wust.web.UpdateBasicFareServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>PrintFareListServlet</servlet-name>
+    <servlet-class>com.wust.web.PrintFareListServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>PrintBasicfareListServlet</servlet-name>
+    <servlet-class>com.wust.web.PrintBasicfareListServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>BatchUpdateChangelimServlet</servlet-name>
+    <servlet-class>com.wust.web.BatchUpdateChangelimServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>findPaymentServlet</servlet-name>
+    <servlet-class>com.wust.web.findPaymentServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>findResultServlet</servlet-name>
+    <servlet-class>com.wust.web.findResultServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>CheckDrawHasOrderedServlet</servlet-name>
+    <servlet-class>com.wust.web.CheckDrawHasOrderedServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>CheckDrawDistributorServlet</servlet-name>
+    <servlet-class>com.wust.web.CheckDrawDistributorServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>CheckDrawFormatServlet</servlet-name>
+    <servlet-class>com.wust.web.CheckDrawFormatServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>CheckDrawSalesmanServlet</servlet-name>
+    <servlet-class>com.wust.web.CheckDrawSalesmanServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>SelectDetailsServlet</servlet-name>
+    <servlet-class>com.wust.web.SelectDetailsServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>DeletedOrderListServlet</servlet-name>
+    <servlet-class>com.wust.web.DeletedOrderListServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>DeletedDraworderListServlet</servlet-name>
+    <servlet-class>com.wust.web.DeletedDraworderListServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>DeletedPaymentListServlet</servlet-name>
+    <servlet-class>com.wust.web.DeletedPaymentListServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>DistIsMatchWithSal</servlet-name>
+    <servlet-class>com.wust.web.DistIsMatchWithSal</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>CheckBasicFare</servlet-name>
+    <servlet-class>com.wust.web.CheckBasicFare</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>ImportPriceByXlsServlet</servlet-name>
+    <servlet-class>com.wust.web.ImportPriceByXlsServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>findDraworderInfoServlet</servlet-name>
+    <servlet-class>com.wust.web.findDraworderInfoServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>CartServlet</servlet-name>
+    <servlet-class>com.wust.web.CartServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>OrderCartServlet</servlet-name>
+    <servlet-class>com.wust.web.OrderCartServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>ShowUpdataOrderServlet</servlet-name>
+    <servlet-class>com.wust.web.ShowUpdataOrderServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>ClearDataToTest</servlet-name>
+    <servlet-class>com.wust.web.ClearDataToTest</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>DelAllPriceServlet</servlet-name>
+    <servlet-class>com.wust.web.DelAllPriceServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>SelectCustomerServlet</servlet-name>
+    <servlet-class>com.wust.web.SelectCustomerServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>AddLevelServlet</servlet-name>
+    <servlet-class>com.wust.web.AddLevelServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>SelectLevel2Servlet</servlet-name>
+    <servlet-class>com.wust.web.SelectLevel2Servlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>DeleteLevelServlet</servlet-name>
+    <servlet-class>com.wust.web.DeleteLevelServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>FindStoreRecordServlet</servlet-name>
+    <servlet-class>com.wust.web.FindStoreRecordServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>StoreRecordInfoServlet</servlet-name>
+    <servlet-class>com.wust.web.StoreRecordInfoServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>AddStoreRecordServlet</servlet-name>
+    <servlet-class>com.wust.web.AddStoreRecordServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>PrintStoreRecordServlet</servlet-name>
+    <servlet-class>com.wust.web.PrintStoreRecordServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>GetBasicFareServlet</servlet-name>
+    <servlet-class>com.wust.web.GetBasicFareServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>GetOrderInfById</servlet-name>
+    <servlet-class>com.wust.web.GetOrderInfById</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>PrintFactoryCertificate</servlet-name>
+    <servlet-class>com.wust.web.PrintFactoryCertificate</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>BasicFreight2ListServlet</servlet-name>
+    <servlet-class>com.wust.web.BasicFreight2ListServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>AddBasicFreightServlet</servlet-name>
+    <servlet-class>com.wust.web.AddBasicFreightServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>DeleteBasicFreightServlet</servlet-name>
+    <servlet-class>com.wust.web.DeleteBasicFreightServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>BasicFreightInfoServlet</servlet-name>
+    <servlet-class>com.wust.web.BasicFreightInfoServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>UpdateBasicFreightServlet</servlet-name>
+    <servlet-class>com.wust.web.UpdateBasicFreightServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>Freight2ListServlet</servlet-name>
+    <servlet-class>com.wust.web.Freight2ListServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>PrintFreightListServlet</servlet-name>
+    <servlet-class>com.wust.web.PrintFreightListServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>PrintBasicfreightListServlet</servlet-name>
+    <servlet-class>com.wust.web.PrintBasicfreightListServlet</servlet-class>
+  </servlet>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <servlet-mapping>
+    <servlet-name>AdminLoginServlet</servlet-name>
+    <url-pattern>/servlet/AdminLoginServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ClerkListServlet</servlet-name>
+    <url-pattern>/servlet/ClerkListServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UpdateClerkServlet</servlet-name>
+    <url-pattern>/servlet/UpdateClerkServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DeleteClerkServlet</servlet-name>
+    <url-pattern>/servlet/DeleteClerkServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ClerkInfoServlet</servlet-name>
+    <url-pattern>/servlet/ClerkInfoServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AddClerkServlet</servlet-name>
+    <url-pattern>/servlet/AddClerkServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DistributorListServlet</servlet-name>
+    <url-pattern>/servlet/DistributorListServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AddDistributorServlet</servlet-name>
+    <url-pattern>/servlet/AddDistributorServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DeleteDistributorServlet</servlet-name>
+    <url-pattern>/servlet/DeleteDistributorServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DistributorInfoServlet</servlet-name>
+    <url-pattern>/servlet/DistributorInfoServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UpdateDistributorServlet</servlet-name>
+    <url-pattern>/servlet/UpdateDistributorServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CustomerListServlet</servlet-name>
+    <url-pattern>/servlet/CustomerListServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AddCustomerServlet</servlet-name>
+    <url-pattern>/servlet/AddCustomerServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DeleteCustomerServlet</servlet-name>
+    <url-pattern>/servlet/DeleteCustomerServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CustomerInfoServlet</servlet-name>
+    <url-pattern>/servlet/CustomerInfoServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UpdateCustomerServlet</servlet-name>
+    <url-pattern>/servlet/UpdateCustomerServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ClerkLoginServlet</servlet-name>
+    <url-pattern>/servlet/ClerkLoginServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>SelectAreaServlet</servlet-name>
+    <url-pattern>/servlet/SelectAreaServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>SelectPriceDirectincServlet</servlet-name>
+    <url-pattern>/servlet/SelectPriceDirectincServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ProductNumServlet</servlet-name>
+    <url-pattern>/servlet/ProductNumServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AddOrderServlet</servlet-name>
+    <url-pattern>/servlet/AddOrderServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>OrderListServlet</servlet-name>
+    <url-pattern>/servlet/OrderListServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>updatePasswordServlet</servlet-name>
+    <url-pattern>/servlet/updatePasswordServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>OrderList2Servlet</servlet-name>
+    <url-pattern>/servlet/OrderList2Servlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UpdateOrderState</servlet-name>
+    <url-pattern>/servlet/UpdateOrderState</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>OrderList3Servlet</servlet-name>
+    <url-pattern>/servlet/OrderList3Servlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>OrderInfoServlet</servlet-name>
+    <url-pattern>/servlet/OrderInfoServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>SelectSalesmanServlet</servlet-name>
+    <url-pattern>/servlet/SelectSalesmanServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>SelectDistributorServlet</servlet-name>
+    <url-pattern>/servlet/SelectDistributorServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>SelectFormatServlet</servlet-name>
+    <url-pattern>/servlet/SelectFormatServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>SelectLevelServlet</servlet-name>
+    <url-pattern>/servlet/SelectLevelServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UpdateOrderServlet</servlet-name>
+    <url-pattern>/servlet/UpdateOrderServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PriceListServlet</servlet-name>
+    <url-pattern>/servlet/PriceListServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PriceInfoServlet</servlet-name>
+    <url-pattern>/servlet/PriceInfoServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UpdatePriceServlet</servlet-name>
+    <url-pattern>/servlet/UpdatePriceServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AddPriceServlet</servlet-name>
+    <url-pattern>/servlet/AddPriceServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>BatchUpdatePriceServlet</servlet-name>
+    <url-pattern>/servlet/BatchUpdatePriceServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DirectincListServlet</servlet-name>
+    <url-pattern>/servlet/DirectincListServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DirectincInfoServlet</servlet-name>
+    <url-pattern>/servlet/DirectincInfoServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UpdateDirectincServlet</servlet-name>
+    <url-pattern>/servlet/UpdateDirectincServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>SelectPackageNumServlet</servlet-name>
+    <url-pattern>/servlet/SelectPackageNumServlet</url-pattern>
+  </servlet-mapping>
+	
+  <servlet-mapping>
+    <servlet-name>ProductListServlet</servlet-name>
+    <url-pattern>/servlet/ProductListServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AddProductServlet</servlet-name>
+    <url-pattern>/servlet/AddProductServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ProductInfoServlet</servlet-name>
+    <url-pattern>/servlet/ProductInfoServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UpdateProductServlet</servlet-name>
+    <url-pattern>/servlet/UpdateProductServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DeleteProductServlet</servlet-name>
+    <url-pattern>/servlet/DeleteProductServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>FindProductServlet</servlet-name>
+    <url-pattern>/servlet/FindProductServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ClerkLogoutServlet</servlet-name>
+    <url-pattern>/servlet/ClerkLogoutServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DraworderListServlet</servlet-name>
+    <url-pattern>/servlet/DraworderListServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AddDraworderServlet</servlet-name>
+    <url-pattern>/servlet/AddDraworderServlet</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>findCheckDrawServlet</servlet-name>
+    <url-pattern>/servlet/findCheckDrawServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CheckOrderIdServlet</servlet-name>
+    <url-pattern>/servlet/CheckOrderIdServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CheckDrawPriceServlet</servlet-name>
+    <url-pattern>/servlet/CheckDrawPriceServlet</url-pattern>
+  </servlet-mapping>
+    <servlet-mapping>
+    <servlet-name>PaymentListServlet</servlet-name>
+    <url-pattern>/servlet/PaymentListServlet</url-pattern>
+  </servlet-mapping>
+      <servlet-mapping>
+    <servlet-name>AddDirectincServlet</servlet-name>
+    <url-pattern>/servlet/AddDirectincServlet</url-pattern>
+  </servlet-mapping>
+        <servlet-mapping>
+    <servlet-name>AddInterestServlet</servlet-name>
+    <url-pattern>/servlet/AddInterestServlet</url-pattern>
+  </servlet-mapping>
+        <servlet-mapping>
+    <servlet-name>AddPaybackServlet</servlet-name>
+    <url-pattern>/servlet/AddPaybackServlet</url-pattern>
+  </servlet-mapping>
+        <servlet-mapping>
+    <servlet-name>AddPaymentServlet</servlet-name>
+    <url-pattern>/servlet/AddPaymentServlet</url-pattern>
+  </servlet-mapping>
+  
+   <servlet-mapping>
+    <servlet-name>DeleteDirectincServlet</servlet-name>
+    <url-pattern>/servlet/DeleteDirectincServlet</url-pattern>
+  </servlet-mapping>
+  
+   <servlet-mapping>
+    <servlet-name>DeletePriceServlet</servlet-name>
+    <url-pattern>/servlet/DeletePriceServlet</url-pattern>
+  </servlet-mapping>
+  
+   <servlet-mapping>
+    <servlet-name>ResultListServlet</servlet-name>
+    <url-pattern>/servlet/ResultListServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CheckDrawNumServlet</servlet-name>
+    <url-pattern>/servlet/CheckDrawNumServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CheckDrawSumpriceServlet</servlet-name>
+    <url-pattern>/servlet/CheckDrawSumpriceServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>SelectPriceServlet</servlet-name>
+    <url-pattern>/servlet/SelectPriceServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PrintProductServlet</servlet-name>
+    <url-pattern>/servlet/PrintProductServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>GetFailOrderNumServlet</servlet-name>
+    <url-pattern>/servlet/GetFailOrderNumServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>GetWaitOrderNumServlet</servlet-name>
+    <url-pattern>/servlet/GetWaitOrderNumServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>RemainCredServlet</servlet-name>
+    <url-pattern>/servlet/RemainCredServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PrintOrderListForSalesmanServlet</servlet-name>
+    <url-pattern>/servlet/PrintOrderListForSalesmanServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PrintOrderListForTreasurerServlet</servlet-name>
+    <url-pattern>/servlet/PrintOrderListForTreasurerServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PrintOrderListForTreasurer2Servlet</servlet-name>
+    <url-pattern>/servlet/PrintOrderListForTreasurer2Servlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PrintPaymentListServlet</servlet-name>
+    <url-pattern>/servlet/PrintPaymentListServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PrintPriceListServlet</servlet-name>
+    <url-pattern>/servlet/PrintPriceListServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PrintDirectincListServlet</servlet-name>
+    <url-pattern>/servlet/PrintDirectincListServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PrintResultListServlet</servlet-name>
+    <url-pattern>/servlet/PrintResultListServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PrintDraworderListServlet</servlet-name>
+    <url-pattern>/servlet/PrintDraworderListServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PrintCheckdrawListServlet</servlet-name>
+    <url-pattern>/servlet/PrintCheckdrawListServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>SelectClerk</servlet-name>
+    <url-pattern>/servlet/SelectClerk</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>SelectCustomer</servlet-name>
+    <url-pattern>/servlet/SelectCustomer</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>SelectDistributor</servlet-name>
+    <url-pattern>/servlet/SelectDistributor</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>FareListServlet</servlet-name>
+    <url-pattern>/servlet/FareListServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>BasicFareListServlet</servlet-name>
+    <url-pattern>/servlet/BasicFareListServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AddBasicFareServlet</servlet-name>
+    <url-pattern>/servlet/AddBasicFareServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DeleteBasicFareServlet</servlet-name>
+    <url-pattern>/servlet/DeleteBasicFareServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>BasicFareInfoServlet</servlet-name>
+    <url-pattern>/servlet/BasicFareInfoServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UpdateBasicFareServlet</servlet-name>
+    <url-pattern>/servlet/UpdateBasicFareServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PrintFareListServlet</servlet-name>
+    <url-pattern>/servlet/PrintFareListServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PrintBasicfareListServlet</servlet-name>
+    <url-pattern>/servlet/PrintBasicfareListServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>BatchUpdateChangelimServlet</servlet-name>
+    <url-pattern>/servlet/BatchUpdateChangelimServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>findPaymentServlet</servlet-name>
+    <url-pattern>/servlet/findPaymentServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>findResultServlet</servlet-name>
+    <url-pattern>/servlet/findResultServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CheckDrawHasOrderedServlet</servlet-name>
+    <url-pattern>/servlet/CheckDrawHasOrderedServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CheckDrawDistributorServlet</servlet-name>
+    <url-pattern>/servlet/CheckDrawDistributorServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CheckDrawFormatServlet</servlet-name>
+    <url-pattern>/servlet/CheckDrawFormatServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CheckDrawSalesmanServlet</servlet-name>
+    <url-pattern>/servlet/CheckDrawSalesmanServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>SelectDetailsServlet</servlet-name>
+    <url-pattern>/servlet/SelectDetailsServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DeletedOrderListServlet</servlet-name>
+    <url-pattern>/servlet/DeletedOrderListServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DeletedDraworderListServlet</servlet-name>
+    <url-pattern>/servlet/DeletedDraworderListServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DeletedPaymentListServlet</servlet-name>
+    <url-pattern>/servlet/DeletedPaymentListServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DistIsMatchWithSal</servlet-name>
+    <url-pattern>/servlet/DistIsMatchWithSal</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CheckBasicFare</servlet-name>
+    <url-pattern>/servlet/CheckBasicFare</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ImportPriceByXlsServlet</servlet-name>
+    <url-pattern>/servlet/ImportPriceByXlsServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>findDraworderInfoServlet</servlet-name>
+    <url-pattern>/servlet/findDraworderInfoServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CartServlet</servlet-name>
+    <url-pattern>/servlet/CartServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>OrderCartServlet</servlet-name>
+    <url-pattern>/servlet/OrderCartServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ShowUpdataOrderServlet</servlet-name>
+    <url-pattern>/servlet/ShowUpdataOrderServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ClearDataToTest</servlet-name>
+    <url-pattern>/servlet/ClearDataToTest</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DelAllPriceServlet</servlet-name>
+    <url-pattern>/servlet/DelAllPriceServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>SelectCustomerServlet</servlet-name>
+    <url-pattern>/servlet/SelectCustomerServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AddLevelServlet</servlet-name>
+    <url-pattern>/servlet/AddLevelServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>SelectLevel2Servlet</servlet-name>
+    <url-pattern>/servlet/SelectLevel2Servlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DeleteLevelServlet</servlet-name>
+    <url-pattern>/servlet/DeleteLevelServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>FindStoreRecordServlet</servlet-name>
+    <url-pattern>/servlet/FindStoreRecordServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>StoreRecordInfoServlet</servlet-name>
+    <url-pattern>/servlet/StoreRecordInfoServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AddStoreRecordServlet</servlet-name>
+    <url-pattern>/servlet/AddStoreRecordServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PrintStoreRecordServlet</servlet-name>
+    <url-pattern>/servlet/PrintStoreRecordServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>GetBasicFareServlet</servlet-name>
+    <url-pattern>/servlet/GetBasicFareServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>GetOrderInfById</servlet-name>
+    <url-pattern>/servlet/GetOrderInfById</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PrintFactoryCertificate</servlet-name>
+    <url-pattern>/servlet/PrintFactoryCertificate</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>BasicFreight2ListServlet</servlet-name>
+    <url-pattern>/servlet/BasicFreight2ListServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AddBasicFreightServlet</servlet-name>
+    <url-pattern>/servlet/AddBasicFreightServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DeleteBasicFreightServlet</servlet-name>
+    <url-pattern>/servlet/DeleteBasicFreightServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>BasicFreightInfoServlet</servlet-name>
+    <url-pattern>/servlet/BasicFreightInfoServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UpdateBasicFreightServlet</servlet-name>
+    <url-pattern>/servlet/UpdateBasicFreightServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Freight2ListServlet</servlet-name>
+    <url-pattern>/servlet/Freight2ListServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PrintFreightListServlet</servlet-name>
+    <url-pattern>/servlet/PrintFreightListServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PrintBasicfreightListServlet</servlet-name>
+    <url-pattern>/servlet/PrintBasicfreightListServlet</url-pattern>
+  </servlet-mapping>
+  
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+</web-app>

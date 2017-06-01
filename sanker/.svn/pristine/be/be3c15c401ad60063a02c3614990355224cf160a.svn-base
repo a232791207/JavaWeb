@@ -1,0 +1,1304 @@
+package com.sanker.service.logic;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import com.sanker.param.Param;
+
+/**
+ * 算番判断 调用该类中的方法 传递的参数 是一组已胡的牌。
+ * 
+ * @author 滕洁
+ * @date 2016-11-12
+ */
+public class CalculateMultiple {
+
+	public static LinkedHashMap<String, Integer> getMultiple(List<String> paiList, List<String> pgList, String pai, String benJin, String gameArea, String roomId) {
+		LinkedHashMap<String, Integer> multiple = new LinkedHashMap<String, Integer>();
+		List<String> allList = new ArrayList<String>(paiList);
+		allList.addAll(pgList);
+		boolean qingFlag = false;
+		int genNum = isGen(allList);
+		/**
+		 * 阆中
+		 */
+		if (gameArea.equals("langZhong")) {
+			boolean qiDuiFlag = false;
+			// 门清
+			if (pgList.size() == 0) {
+				multiple.put("清", 1);
+			}
+			// 缺一门
+			if (isQue(allList)) {
+				multiple.put("缺", 1);
+			}
+			// 将
+			if (isJiang(paiList)) {
+				multiple.put("将", 1);
+			}
+			// 报 胡
+			multiple.put("报", 1);
+			multiple.put("胡", 1);
+			// 清一色 乱清
+			if (isQingYiSe(allList)) {
+				qingFlag = true;
+				if (isLuanQing(paiList)) {
+					multiple.put("乱清", 6);
+				} else {
+					multiple.put("正清", 8);
+				}
+			}
+
+			// 七对
+			if (paiList.size() == 14 && isQiDui(paiList)) {
+				qiDuiFlag = true;
+				if (isGen(paiList) > 0) {
+					multiple.put("龙七对", 7);
+				} else
+					multiple.put("暗七对", 6);
+			}
+			// 明七对
+			if (pgList.size() == 3 && isQiDui(allList)) {
+				qiDuiFlag = true;
+				if (isGen(allList) > 0) {
+					multiple.put("龙七对", 7);
+				} else
+					multiple.put("明七对", 5);
+			}
+			// 姊妹花
+			int ziMeiNum = isZiMeiHua(paiList, qiDuiFlag, Param.BANZI_CG);
+			if (ziMeiNum > 0) {
+				multiple.put("姊妹花 x " + ziMeiNum, 2 * ziMeiNum);
+			}
+			// 兄弟坎
+			int xiongDiNum = isXiongDiKan(paiList, pgList, Param.FEIJI_CG);
+			if (xiongDiNum > 0) {
+				multiple.put("兄弟坎 x " + xiongDiNum, 2 * xiongDiNum);
+			}
+			// 对对胡
+			if (isDuiDuiHu(paiList)) {
+				multiple.put("大对子", 5);
+			}
+			// 边
+			if (isBian(paiList, pai)) {
+				multiple.put("边", 1);
+			}
+			// 卡
+			if (isKa(paiList, pai)) {
+				if (pai.charAt(0) == '5') {
+					multiple.put("卡心五", 2);
+				} else
+					multiple.put("卡", 1);
+			}
+			// 吊
+			if (isDiao(paiList, pai)) {
+				if (pai.charAt(0) == '2' || pai.charAt(0) == '5' || pai.charAt(0) == '8') {
+					multiple.put("吊将", 2);
+				} else
+					multiple.put("吊", 1);
+			}
+			// 对处
+			if (isDuiChu(paiList, pai)) {
+				multiple.put("对处", 1);
+			}
+			// 一条龙
+			if (isYiTiaoLong(paiList)) {
+				multiple.put("一条龙", 5);
+			}
+			// 断头断尾
+			int duanNum = isDuanYaoJiu(allList);
+			if (duanNum == 1) {
+				multiple.put("断一头", 1);
+			} else if (duanNum == 2) {
+				multiple.put("断双头", 2);
+			} else if (duanNum == 3) {
+				multiple.put("断一头", 1);
+			}
+
+		}
+		/**
+		 * 成都
+		 */
+		if (gameArea.equals("chengDu")) {
+			// 清一色
+			if (isQingYiSe(allList)) {
+				qingFlag = true;
+				multiple.put("清一色", 2);
+			}
+			/*
+			 * //门清 if(pgList.size()==0){ multiple.put("门清", 1); }
+			 */
+			// 对对胡
+			if (isDuiDuiHu(paiList)) {
+				if (qingFlag) {
+					multiple.remove("清一色");
+					multiple.put("清对", 3);
+				} else {
+					/**
+					 * 判断规则中是否包含幺九将对
+					 */
+					if (ControlRoom.roomRule.get(roomId).getRule().contains("yaoJiuJiangDui")) {
+
+						if (isJiangDui(paiList))
+							multiple.put("将对", 3);
+						// 幺九
+						else if (isYaoJiu(allList))
+							multiple.put("幺九", 3);
+						else
+							multiple.put("对对胡", 1);
+					} else
+						multiple.put("对对胡", 1);
+				}
+
+			}
+
+			// 金钩钓
+			if (paiList.size() == 2) {
+				if (genNum == 4) {// 十八罗汉
+					genNum -= 4;
+					if (qingFlag) {
+						multiple.remove("清一色");
+						multiple.remove("清对");
+						multiple.put("清十八罗汉", 7);
+					} else {
+						multiple.put("十八罗汉", 6);
+					}
+				} else {
+					multiple.put("金钩吊", 1);
+				}
+			}
+
+			// 七对
+			if (paiList.size() == 14 && isQiDui(paiList)) {
+				if (qingFlag) {
+					multiple.remove("清一色");
+					if (genNum > 0) {
+						genNum -= 1;
+						multiple.put("清龙七对", 5);
+					} else {
+						multiple.put("清七对", 4);
+					}
+				} else if (genNum > 0) {
+					genNum -= 1;
+					if (isJiang(paiList)) {
+						multiple.put("将七对", 4);
+					} else
+						multiple.put("龙七对", 3);
+				} else {
+					multiple.put("七对", 2);
+				}
+			}
+
+			/**
+			 * 判断规则中是否包含门清中张
+			 */
+			if (ControlRoom.roomRule.get(roomId).getRule().contains("mengQingZhongZhang")) {
+				// 中张
+				if (isZhongZhang(allList)) {
+					multiple.put("中张", 1);
+				}
+				// 门清
+				if (pgList.size() == 0) {
+					multiple.put("门清", 1);
+				}
+			}
+
+		}
+		/**
+		 * 德阳
+		 */
+		if (gameArea.equals("deYang")) {
+			// 清一色
+			if (isQingYiSe(allList)) {
+				qingFlag = true;
+				multiple.put("清一色", 2);
+			}
+			// 门清
+			if (pgList.size() == 0) {
+				multiple.put("门清", 1);
+			}
+			// 金钩钓
+			if (paiList.size() == 2) {
+				if (genNum == 4) {// 十八罗汉
+					genNum -= 4;
+					if (qingFlag) {
+						multiple.remove("清一色");
+						multiple.put("清十八罗汉", 7);
+					} else {
+						multiple.put("十八罗汉", 6);
+					}
+				} else {
+					multiple.put("金钩钓", 1);
+				}
+			}
+			// 对对胡
+			if (isDuiDuiHu(paiList)) {
+				if (qingFlag) {
+					multiple.remove("清一色");
+					multiple.put("清对", 3);
+				} else if (isJiang(paiList)) {
+					multiple.put("将对", 3);
+				} else
+					multiple.put("对对胡", 1);
+			}
+			// 七对
+			if (paiList.size() == 14 && isQiDui(paiList)) {
+				if (qingFlag) {
+					multiple.remove("清一色");
+					if (genNum > 0) {
+						genNum -= 1;
+						multiple.put("清龙七对", 5);
+					} else {
+						multiple.put("清七对", 4);
+					}
+				} else if (genNum > 0) {
+					genNum -= 1;
+					if (isJiang(paiList)) {
+						multiple.put("将七对", 4);
+					} else
+						multiple.put("龙七对", 3);
+				} else {
+					multiple.put("七对", 2);
+				}
+			}
+			// 幺九
+			if (isYaoJiu(allList)) {
+				multiple.put("幺九", 3);
+			}
+
+			// 中张
+			if (isZhongZhang(allList)) {
+				multiple.put("中张", 1);
+			}
+			// 一条龙
+			if (isYiTiaoLong(paiList)) {
+				multiple.put("一条龙", 1);
+			}
+			// 夹心五
+			if (pai.charAt(0) == '5' && isKa(paiList, pai)) {
+				multiple.put("卡心五", 1);
+			}
+		}
+		/**
+		 * 西昌
+		 */
+		if (gameArea.equals("xiChang")) {
+
+			// 清一色
+			if (isQingYiSe(allList)) {
+				qingFlag = true;
+				multiple.put("清一色", 4);
+			}
+			// 卡心五
+			if (isKa(paiList, pai) && pai.charAt(0) == '5') {
+				if (qingFlag) {
+					multiple.remove("清一色");
+					multiple.put("清卡心五", 8);
+				} else
+					multiple.put("卡心五", 2);
+			}
+			// 中张
+			if (isZhongZhang(allList)) {
+				multiple.put("中张", 1);
+			}
+			// 门清
+			if (pgList.size() == 0) {
+				multiple.put("门清", 1);
+			}
+			// 幺九
+			boolean yaoJiu = false;
+			if (isYaoJiu(allList)) {
+				yaoJiu = true;
+				if (qingFlag) {
+					multiple.remove("清一色");
+					multiple.put("清幺九", 16);
+				} else
+					multiple.put("幺九", 4);
+			}
+			// 对对胡
+			if (isDuiDuiHu(paiList)) {
+				if (qingFlag) {
+					multiple.remove("清一色");
+					multiple.put("清对", 8);
+				} else if (isJiangDui(allList)) {
+					multiple.put("将对", 8);
+				} else if (yaoJiu) {
+					multiple.remove("幺九");
+					multiple.put("幺九对", 16);
+				} else
+					multiple.put("对对胡", 2);
+
+			}
+			// 七对
+			if (paiList.size() == 14 && isQiDui(paiList)) {
+				if (qingFlag) {
+					multiple.remove("清一色");
+					if (genNum == 1) {
+						genNum -= 1;
+						multiple.put("清龙七对", 16);
+					} else if (genNum > 1) {
+						genNum -= 2;
+						multiple.put("清凤七对", 16);
+					} else {
+						multiple.put("清七对", 16);
+					}
+				} else {
+					if (genNum == 1) {
+						genNum -= 1;
+						if (isJiangDui(paiList)) {
+							multiple.put("将七对", 16);
+						} else
+							multiple.put("龙七对", 8);
+					} else if (genNum > 1) {
+						genNum -= 2;
+						multiple.put("凤七对", 16);
+					} else
+						multiple.put("七对", 2);
+				}
+			}
+		}
+		/**
+		 * 自贡
+		 */
+		if (gameArea.equals("ziGong")) {
+
+			// 卡二条
+			if (pai.equals("2T") && isKa(paiList, pai)) {
+				multiple.put("卡二条", 1);
+			}
+			// 门清
+			if (pgList.size() == 0) {
+				multiple.put("门清", 1);
+			}
+			// 清一色
+			if (isQingYiSe(allList)) {
+				qingFlag = true;
+				multiple.put("清一色", 2);
+			}
+			// 中张
+			if (isZhongZhang(allList)) {
+				multiple.put("中张", 1);
+			}
+			// 对对胡
+			if (isDuiDuiHu(paiList)) {
+				if (qingFlag) {
+					multiple.remove("清一色");
+					multiple.put("清对", 3);
+				} else if (isJiangDui(allList)) {
+					multiple.put("将对", 3);
+				} else
+					multiple.put("对对胡", 2);
+			}
+			// 七对
+			if (pgList.size() == 0 && isQiDui(paiList)) {
+				if (qingFlag) {
+					multiple.remove("清一色");
+					if (genNum > 0) {
+						genNum -= 1;
+						multiple.put("清龙七对", 5);
+					} else {
+						multiple.put("清七对", 3);
+					}
+				} else if (genNum > 0) {
+					genNum -= 1;
+					multiple.put("龙七对", 3);
+				} else {
+					multiple.put("七对", 2);
+				}
+			}
+			// 幺九
+			if (isYaoJiu(allList)) {
+				multiple.put("幺九", 2);
+			}
+		}
+		/**
+		 * 内江
+		 */
+		if (gameArea.equals("neiJiang")) {
+
+			// 卡二条
+			if (pai.equals("2T") && isKa(paiList, pai)) {
+				multiple.put("卡二条", 1);
+			}
+			// 门清
+			if (pgList.size() == 0) {
+				multiple.put("门清", 1);
+			}
+			// 清一色
+			if (isQingYiSe(allList)) {
+				qingFlag = true;
+				multiple.put("清一色", 2);
+			}
+			// 中张
+			if (isZhongZhang(allList)) {
+				multiple.put("中张", 1);
+			}
+			// 金钩钓
+			if (paiList.size() == 2) {
+				multiple.put("金钩钓", 1);
+			}
+			// 四归一
+			/********************************************************************/
+			int siGuiNum = isSiGuiYi(paiList, pgList);
+			if (siGuiNum > 0) {
+				genNum -= siGuiNum;
+				multiple.put("四归一 x " + siGuiNum, siGuiNum);
+			}
+			// 幺九
+			if (isYaoJiu(allList)) {
+				multiple.put("幺九", 2);
+			}
+			// 对对胡
+			if (isDuiDuiHu(paiList)) {
+				if (qingFlag) {
+					multiple.remove("清一色");
+					multiple.put("清对", 3);
+				} else if (isJiangDui(allList)) {
+					multiple.put("将对", 3);
+				} else
+					multiple.put("对对胡", 2);
+			}
+			// 七对
+			if (pgList.size() == 0 && isQiDui(paiList)) {
+				if (qingFlag) {
+					multiple.remove("清一色");
+					if (genNum > 0) {
+						genNum -= 1;
+						multiple.put("清龙七对", 5);
+					} else {
+						multiple.put("清七对", 3);
+					}
+				} else if (genNum > 0) {
+					genNum -= 1;
+					multiple.put("龙七对", 3);
+				} else {
+					multiple.put("七对", 2);
+				}
+			}
+
+		}
+
+		/**
+		 * 广安
+		 */
+		if (gameArea.equals("guangAn")) {
+
+			// 缺一门
+			if (isQue(allList)) {
+				multiple.put("缺一门", 1);
+			}
+			// 红中
+			if (isZhongFabBai(allList, "0Z")) {
+				multiple.put("红中", 1);
+			}
+			// 发财
+			if (isZhongFabBai(allList, "0F")) {
+				multiple.put("发财", 1);
+			}
+			// 白板
+			if (isZhongFabBai(allList, "0B")) {
+				multiple.put("白板", 1);
+			}
+			// 卡心五
+			if (pai.charAt(0) == '5' && isKa(paiList, pai)) {
+				multiple.put("卡心五", 1);
+			}
+			// 清一色
+			if (isGuangAnQing(allList)) {
+				qingFlag = true;
+				if (isQingYiSe(allList)) {
+					multiple.put("正清", 10);
+				} else
+					multiple.put("清一色", 5);
+			}
+			// 卡边吊
+			if (isKaBianDiao(paiList, pai)) {
+				multiple.put("卡边吊", 1);
+			}
+			// 金钩钓
+			if (paiList.size() == 2) {
+				multiple.put("金钩钓", 5);
+			}
+			// 七对
+			boolean qiFlag = false;
+			if (paiList.size() == 14 && isQiDui(paiList)) {
+				qiFlag = true;
+				if (genNum > 0) {
+					genNum -= 1;
+					multiple.put("龙七对", 10);
+				} else
+					multiple.put("七对", 5);
+			}
+			// 一条龙
+			if (isYiTiaoLong(paiList)) {
+				multiple.put("一条龙", 5);
+			}
+			// 四归一
+			/********************************************************************/
+			int siGuiNum = isSiGuiYi(paiList, pgList);
+			if (siGuiNum > 0) {
+				genNum -= siGuiNum;
+				multiple.put("四归一 x " + siGuiNum, siGuiNum);
+			}
+			// 三元
+			String sanYuan = isSanYuan(allList, qiFlag);
+			if (sanYuan.equals("d")) {
+				multiple.put("大三元", 10);
+			} else if (sanYuan.equals("x")) {
+				multiple.put("小三元", 5);
+			}
+			// 对对胡
+			if (isDuiDuiHu(paiList)) {
+				multiple.put("对对胡", 5);
+
+			}
+
+			// 板子 飞机
+			/**********************************************************************/
+		}
+		/**
+		 * 宜宾 泸州 提取听用和鬼牌
+		 */
+		if (gameArea.equals("yiBin")) {
+			// 清一色
+			if (isQingYiSe(allList)) {
+				qingFlag = true;
+				multiple.put("清一色", 3);
+			}
+			// 对对胡
+			if (isDuiDuiHu(paiList)) {
+				if (qingFlag) {
+					multiple.remove("清一色");
+					multiple.put("清对", 5);
+				} else
+					multiple.put("对对胡", 2);
+			}
+			// 七对
+			if (paiList.size() == 14 && isQiDui(paiList)) {
+				if (qingFlag) {
+					multiple.remove("清一色");
+					if (genNum == 1) {
+						genNum -= 1;
+						multiple.put("清龙七对", 5);
+					} else if (genNum > 1) {
+						genNum -= 2;
+						multiple.put("清双龙七对", 6);
+					} else {
+						multiple.put("清七对", 5);
+					}
+				} else {
+					if (genNum == 1) {
+						genNum -= 1;
+						multiple.put("龙七对", 4);
+					} else if (genNum > 1) {
+						genNum -= 2;
+						multiple.put("双龙七对", 5);
+					} else {
+						multiple.put("七对", 3);
+					}
+				}
+
+			}
+			// 金钩钓
+			if (paiList.size() == 2) {
+				multiple.put("金钩钓", 1);
+			}
+			// 无听用
+
+			// 本金
+			if (isBenJin(pgList, benJin)) {
+
+				multiple.put("本金", 1);
+			}
+		}
+
+		/**
+		 * 泸州
+		 */
+		if (gameArea.equals("luZhou")) {
+			// 清一色
+			if (isQingYiSe(allList)) {
+				qingFlag = true;
+				multiple.put("清一色", 5);
+			}
+			// 对对胡
+			if (isDuiDuiHu(paiList)) {
+				if (qingFlag) {
+					multiple.remove("清一色");
+					multiple.put("清对", 10);
+				} else
+					multiple.put("对对胡", 5);
+			}
+			// 七对
+			if (pgList.size() == 0 && isQiDui(paiList)) {
+				if (qingFlag) {
+					multiple.remove("清一色");
+					if (genNum > 0) {
+						genNum -= 1;
+						multiple.put("清龙七对", 20);
+					} else
+						multiple.put("清七对", 10);
+				} else {
+					if (genNum > 0) {
+						genNum -= 1;
+						multiple.put("龙七对", 10);
+					} else
+						multiple.put("七对", 5);
+				}
+
+			}
+			// 闺
+			int guiNum = isGen(allList);
+			if (guiNum > 0) {
+				genNum -= guiNum;
+				multiple.put("闺 x " + guiNum, guiNum);
+			}
+		}
+		if (genNum > 0) {
+			multiple.put("根 x " + genNum, genNum);
+		}
+		return multiple;
+	}
+
+	/************************************* 算番 ************************************************************/
+
+	/**
+	 * 幺九
+	 */
+	private static boolean isYaoJiu(List<String> paiList) {
+		List<String> temp = new ArrayList<>(paiList);
+		for (String string : paiList) {
+			if (string.charAt(0) == '2') {
+				temp.remove(1 + String.valueOf(string.charAt(1)));
+				temp.remove(2 + String.valueOf(string.charAt(1)));
+				temp.remove(3 + String.valueOf(string.charAt(1)));
+			} else if (string.charAt(0) == '8') {
+				temp.remove(7 + String.valueOf(string.charAt(1)));
+				temp.remove(8 + String.valueOf(string.charAt(1)));
+				temp.remove(9 + String.valueOf(string.charAt(1)));
+			}
+		}
+		for (String string : temp) {
+			if (string.charAt(0) != '1' && string.charAt(0) != '9')
+				return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * 无听用
+	 */
+	public static boolean isWuTing(List<String> paiList, String ben, String type) {
+		List<String> tingYon = HuPaiLogic.getTYPai(type, ben);
+		for (String string : tingYon) {
+			if (paiList.contains(string))
+				return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * 本金
+	 */
+	private static boolean isBenJin(List<String> paiList, String benJin) {
+		int num = 0;
+		for (String pai : paiList) {
+			if (pai.equals(benJin))
+				num++;
+		}
+		if (num > 2) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * 三元
+	 */
+	private static String isSanYuan(List<String> allList, boolean qiFlag) {
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		int dSan = 0;
+		int qiSan = 0;
+		for (String string : allList) {
+			if (string.charAt(0) == '0') {
+				if (map.containsKey(string)) {
+					Integer num = map.get(string);
+					map.put(string, num += 1);
+				} else {
+					map.put(string, 1);
+				}
+			}
+
+		}
+		for (Entry<String, Integer> entry : map.entrySet()) {
+			if (entry.getValue() > 2) {
+				dSan++;
+			}
+			if (qiFlag) {
+				if (entry.getValue() > 1) {
+					qiSan++;
+				}
+			}
+		}
+		if (dSan == 3) {
+			return "d";
+		} else if (dSan == 2) {
+			return "x";
+		}
+		if (qiFlag) {
+			if (qiSan == 3) {
+				return "x";
+			}
+		}
+		return "n";
+
+	}
+
+	/**
+	 * 卡边吊
+	 */
+	private static boolean isKaBianDiao(List<String> paiList, String pai) {
+
+		List<String> temp = new ArrayList<String>(paiList);
+		temp.remove(pai);
+		if (HuPaiLogic.canHu(temp, "").size() == 1)
+			return true;
+
+		return false;
+	}
+
+	/**
+	 * 广安清
+	 */
+	private static boolean isGuangAnQing(List<String> allList) {
+		char huaSe = allList.get(0).charAt(1);
+		for (String pai : allList) {
+			if (pai.charAt(1) != huaSe && pai.charAt(0) != '0')
+				return false;
+		}
+		return true;
+	}
+
+	/**
+	 * 广安中发白
+	 */
+	private static boolean isZhongFabBai(List<String> allList, String pai) {
+		int num = 0;
+		for (String string : allList) {
+			if (string.equals(pai))
+				num++;
+		}
+		if (num > 2) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * 对处
+	 */
+	private static boolean isDuiChu(List<String> paiList, String pai) {
+		List<String> newList = new ArrayList<String>(paiList);
+		for (int i = 0; i < 3; i++) {
+			if (!newList.remove(pai))
+				return false;
+		}
+		if (tryHU(FenJie.fenJie(newList), newList.size()))
+			return true;
+
+		return false;
+	}
+
+	/**
+	 * 吊
+	 */
+	private static boolean isDiao(List<String> paiList, String pai) {
+		List<String> newList = new ArrayList<>(paiList);
+		if (newList.remove(pai) && newList.remove(pai)) {
+			if (tryHU(FenJie.fenJie(newList), newList.size())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * 卡
+	 */
+	private static boolean isKa(List<String> paiList, String pai) {
+		List<String> newList = new ArrayList<>(paiList);
+		Integer before = Integer.valueOf(String.valueOf(pai.charAt(0))) - 1;
+		Integer after = before + 2;
+		newList.remove(pai);
+		if (pai.charAt(0) == '1' || pai.charAt(0) == '9') {
+			return false;
+		}
+		if (HuPaiLogic.canHu(newList, "").size() == 1) {
+			if (paiList.contains(before + String.valueOf(pai.charAt(1))) && paiList.contains(after + String.valueOf(pai.charAt(1)))) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * 边
+	 */
+	private static boolean isBian(List<String> paiList, String pai) {
+		List<String> newList = new ArrayList<>(paiList);
+		newList.remove(pai);
+		if (pai.charAt(0) != '3' && pai.charAt(0) != '7') {
+			return false;
+		}
+		if (HuPaiLogic.canHu(newList, "").size() == 1) {
+			if (newList.contains(1 + String.valueOf(pai.charAt(1))) && newList.contains(2 + String.valueOf(pai.charAt(1)))) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * 乱清
+	 */
+	private static boolean isLuanQing(List<String> paiList) {
+		if (tryHU(FenJie.fenJie(paiList), paiList.size()))
+			return false;
+		else
+			return true;
+	}
+
+	/**
+	 * 七对
+	 */
+	private static boolean isQiDui(List<String> paiList) {
+		
+		int[] count = FenJie.fenJie(paiList);
+		for (int i = 0; i < count.length; i++) {
+			if (count[i] % 2 != 0)
+				return false;
+		}
+		return true;
+	}
+
+	/**
+	 * 258将
+	 */
+	private static boolean isJiang(List<String> paiList) {
+		for (String str : paiList) {
+			List<String> list = new ArrayList<>(paiList);
+			int num = 0;
+			for (String pai : paiList) {
+				if (pai.equals(str)) {
+					num++;
+				}
+			}
+			if (num >= 2) {
+				list.remove(str);
+				list.remove(str);
+				if (tryHU(FenJie.fenJie(list), list.size())) {
+					if (str.charAt(0) == '2' || str.charAt(0) == '5' || str.charAt(0) == '8')
+						return true;
+				}
+			}
+
+		}
+
+		return false;
+	}
+
+	/**
+	 * 缺一门
+	 */
+	private static boolean isQue(List<String> allList) {
+		List<String> huaSe = new ArrayList<String>();
+		for (String pai : allList) {
+			if (!huaSe.contains(String.valueOf(pai.charAt(1)))) {
+				huaSe.add(String.valueOf(pai.charAt(1)));
+			}
+		}
+		if (huaSe.size() < 3) {
+			return true;
+		}
+		return false;
+
+	}
+
+	/**
+	 * 是否是对对胡 手中的牌只能为n*A + 2n n>=3
+	 */
+	private static boolean isDuiDuiHu(List<String> paiList) {
+
+		Set<String> breedSet = new HashSet<String>();
+		int janNum = 0;
+		breedSet.addAll(paiList);
+		for (String string : breedSet) {
+			int num = 0;
+			for (String pai : paiList) {
+				if (pai.equals(string)) {
+					num++;
+				}
+			}
+			if (num == 2) {
+				if (janNum == 0)
+					janNum++;
+				else
+					return false;
+			} else if (num == 1) {
+				return false;
+			}
+
+		}
+
+		return true;
+	}
+
+	/**
+	 * 是否是中张
+	 */
+	private static boolean isZhongZhang(List<String> paiList) {
+		for (String string : paiList) {
+			if (string.contains("1") || string.contains("9"))
+				return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * 是否是清一色 1.听用，鬼牌会代替其它花色的牌。 2.广安麻将：清一色可以含有中发白 纯清不含中发白。
+	 */
+	private static boolean isQingYiSe(List<String> paiList) {
+		char huaSe = paiList.get(0).charAt(1);
+		for (String string : paiList) {
+			if (string.charAt(1) != huaSe)
+				return false;
+		}
+		return true;
+	}
+
+	/**
+	 * 是否断幺九 0: 否 1：1 2:1-9 3:9
+	 */
+	private static int isDuanYaoJiu(List<String> paiList) {
+		String paiListStr = paiList.toString();
+		if (paiListStr.contains("1") && paiListStr.contains("9")) {
+			return 0;
+		} else if (!paiListStr.contains("1") && !paiListStr.contains("9")) {
+			return 2;
+		} else if (!paiListStr.contains("1")) {
+			return 1;
+		} else {
+			return 3;
+		}
+
+	}
+
+	/**
+	 * 根的个数
+	 */
+	private static int isGen(List<String> paiList) {
+		int genNum = 0;
+		Map<String, Integer> spMap = new HashMap<String, Integer>();
+		for (String string : paiList) {
+			if (spMap.containsKey(string)) {
+				spMap.put(string, spMap.get(string) + 1);
+			} else {
+				spMap.put(string, 1);
+			}
+		}
+		for (Map.Entry<String, Integer> map : spMap.entrySet()) {
+			if (map.getValue() == 4) {
+				genNum++;
+			}
+		}
+		return genNum;
+	}
+
+	/**
+	 * 兄弟坎 飞机 先分解 碰杠可以加入计算 type:大飞机
+	 */
+	public static int isXiongDiKan(List<String> paiList, List<String> pgList, String type) {
+		int feiJiNum = 0;
+		int num = type.equals(Param.FEIJI_DA) ? -1 : 0;
+
+		List<String> indexList = new ArrayList<String>();
+		if (pgList != null) {
+			for (String string : pgList) {
+				if (!indexList.contains(string)) {
+					indexList.add(string);
+				}
+			}
+		}
+		for (String string : indexList) {
+			for (int i = 0; i < 3; i++) {
+				paiList.add(string);
+			}
+		}
+		for (int t = 0; t < 3; t++) {
+			int num1 = 0;
+			int num2 = 0;
+			if (t == 0) {
+				num1 = 0;
+				num2 = 8 + num;
+			} else if (t == 1) {
+				num1 = 9;
+				num2 = 17 + num;
+			} else if (t == 2) {
+				num1 = 18;
+				num2 = 26 + num;
+			}
+			for (int i = num1; i < num2; i++) {
+				int[] count = FenJie.fenJie(paiList);
+				if (type.equals(Param.FEIJI_DA)) {
+					if (count[i] >= 3 && count[i + 1] >= 3 && count[i + 2] >= 3) {
+						count[i] -= 3;
+						count[i + 1] -= 3;
+						count[i + 2] -= 3;
+						if (tryHU(count, paiList.size() - 9))
+							feiJiNum++;
+					}
+				} else if (type.equals(Param.FEIJI_CG)) {
+					if (count[i] >= 3 && count[i + 1] >= 3) {
+						count[i] -= 3;
+						count[i + 1] -= 3;
+						if (tryHU(count, paiList.size() - 6))
+							feiJiNum++;
+					}
+				}
+			}
+		}
+		return feiJiNum;
+	}
+
+	/**
+	 * 姊妹花 七对为特殊情况 type:是否为七对 banZiType:判断的板子类型（大，常规）
+	 */
+	public static int isZiMeiHua(List<String> paiList, boolean type, String banZiType) {
+		int ziMeiHuaNum = 0;
+		int num = banZiType.equals(Param.BANZI_DA) ? -1 : 0;
+		for (int t = 0; t < 3; t++) {
+			int num1 = 0;
+			int num2 = 0;
+			if (t == 0) {
+				num1 = 0;
+				num2 = 7 + num;
+			} else if (t == 1) {
+				num1 = 9;
+				num2 = 16 + num;
+			} else if (t == 2) {
+				num1 = 18;
+				num2 = 25 + num;
+
+			}
+			for (int i = num1; i < num2; i++) {
+				int[] count = FenJie.fenJie(paiList);
+				if (banZiType.equals(Param.BANZI_DA)) {
+					if (count[i] >= 2 && count[i + 1] >= 2 && count[i + 2] >= 2 && count[i + 3] >= 2) {
+						count[i] -= 2;
+						count[i + 1] -= 2;
+						count[i + 2] -= 2;
+						count[i + 3] -= 2;
+						if (type) {
+							ziMeiHuaNum++;
+						} else {
+							if (tryHU(count, paiList.size() - 8))
+								ziMeiHuaNum++;
+						}
+					}
+				} else if (banZiType.equals(Param.BANZI_CG)) {
+					if (count[i] >= 2 && count[i + 1] >= 2 && count[i + 2] >= 2) {
+						count[i] -= 2;
+						count[i + 1] -= 2;
+						count[i + 2] -= 2;
+						if (type) {
+							ziMeiHuaNum++;
+						} else {
+							if (tryHU(count, paiList.size() - 6))
+								ziMeiHuaNum++;
+						}
+					}
+				}
+			}
+
+		}
+
+		return ziMeiHuaNum;
+	}
+
+	/**
+	 * 四归一(没有杠出来的牌) 的个数
+	 * 
+	 * @param spList
+	 *            手牌
+	 * @param pList
+	 *            所有碰的牌
+	 * @return
+	 */
+	private static int isSiGuiYi(List<String> paiList, List<String> pgList) {
+
+		int sgyNum = 0;
+		for (String string : pgList) {
+			if (paiList.contains(string))
+				sgyNum++;
+		}
+
+		Map<String, Integer> spMap = new HashMap<String, Integer>();
+		for (String string : paiList) {
+			if (spMap.containsKey(string)) {
+				spMap.put(string, spMap.get(string) + 1);
+			} else {
+				spMap.put(string, 1);
+			}
+		}
+		for (Map.Entry<String, Integer> map : spMap.entrySet()) {
+			if (map.getValue() == 4) {
+				sgyNum++;
+			}
+		}
+
+		return sgyNum;
+	}
+
+	/**
+	 * 一条龙 paiList:此时是所有的牌——手中的牌 同一花色的牌的张数至少为九张 将满足一条龙的牌从手牌中分离出力，判断剩余的牌是否能胡
+	 */
+	private static boolean isYiTiaoLong(List<String> paiList) {
+		
+		List<String> temp = new ArrayList<String>(paiList);
+		int wanNum = 0;
+		int tiaoNum = 0;
+		int tongNum = 0;
+		String huaSe = "";
+		for (String string : paiList) {
+			if (string.contains("W")) {
+				wanNum++;
+			} else if (string.contains("T")) {
+				tiaoNum++;
+			} else if (string.contains("D")) {
+				tongNum++;
+			}
+		}
+		if (wanNum >= 9) {
+			huaSe = "W";
+		} else if (tiaoNum >= 9) {
+			huaSe = "T";
+		} else if (tongNum >= 9) {
+			huaSe = "D";
+		} else {
+			return false;
+		}
+		
+		for (int i = 1; i < 10; i++) {
+			
+			if(temp.contains(i+huaSe)){
+				temp.remove(i + huaSe);
+			}else{
+				return false;
+			}
+		}
+
+		return tryHU(FenJie.fenJie(temp), temp.size());
+	}
+
+	/**
+	 * 将对 所有的牌都在2 5 8 之间
+	 */
+	private static boolean isJiangDui(List<String> paiList) {
+		for (String string : paiList) {
+			if (!string.contains("2") && !string.contains("5") && !string.contains("8")) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private static boolean tryHU(int[] count, int len) {
+		// TODO Auto-generated method stub
+		if (len == 0)
+
+			return true;
+		if (len % 3 == 2) {
+			for (int i = 0; i < 30; i++) {
+				if (count[i] >= 2) {
+
+					count[i] -= 2;
+
+					if (tryHU(count, len - 2))// 将能凑成一对的牌从队列Z移除，判断其他的牌是否能组成三个或者顺子
+
+						return true;
+
+					count[i] += 2;
+
+				}
+			}
+		} else {
+			// 三个一样的 将三个一样的剔除队列。
+
+			for (int i = 0; i < 30; i++) {
+
+				if (count[i] >= 3) {
+
+					count[i] -= 3;
+
+					if (tryHU(count, len - 3))
+
+						return true;
+
+					count[i] += 3;
+
+				}
+			}
+			// 是否是顺子 将顺子剔除队列
+			for (int t = 0; t < 3; t++) {
+				int num3 = 0;
+				int num4 = 0;
+				if (t == 0) {
+					num3 = 0;
+					num4 = 7;
+				} else if (t == 1) {
+
+					num3 = 9;
+					num4 = 16;
+				} else if (t == 2) {
+					num3 = 18;
+					num4 = 25;
+
+				}
+				for (int i = num3; i < num4; i++) {
+
+					if (count[i] > 0 && count[i + 1] > 0 && count[i + 2] > 0) {
+
+						count[i] -= 1;
+
+						count[i + 1] -= 1;
+
+						count[i + 2] -= 1;
+
+						if (tryHU(count, len - 3))
+
+							return true;
+
+						count[i] += 1;
+
+						count[i + 1] += 1;
+
+						count[i + 2] += 1;
+					}
+				}
+			}
+		}
+		return false;
+	}
+}

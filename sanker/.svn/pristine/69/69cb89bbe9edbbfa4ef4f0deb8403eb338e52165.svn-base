@@ -1,0 +1,40 @@
+package com.sanker.service.logic;
+
+import java.util.List;
+
+/**
+ * 七对和牌算法
+ * @author 滕洁
+ * @date 2016-11-6
+ */
+public class PiDuiLogic {
+	
+	/**
+	 * 判断
+	 * @return
+	 */
+	public static boolean canHu(List<String> paiList,String pai){
+		paiList.add(pai);
+		return isHu(FenJie.fenJie(paiList));
+	}
+	
+	
+	private static boolean isHu(int[] count){
+		
+		boolean canHu = true;
+		
+		for(int i = 0;i<27;i++){
+			
+			if(count[i]%2!=0){
+				
+				canHu = false;
+				
+			}
+			
+		}
+		
+		return canHu;
+	}
+	
+	
+}

@@ -1,0 +1,433 @@
+package com.sanker.service.websocket;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import net.sf.json.JSONObject;
+
+import org.springframework.web.context.ContextLoader;
+
+import com.sanker.entity.game.GameRoom;
+import com.sanker.entity.game.Ledger;
+import com.sanker.param.Param;
+import com.sanker.service.game.LedgerService;
+import com.sanker.service.logic.CalculateMultiple;
+import com.sanker.service.logic.ControlRoom;
+import com.sanker.service.player.PlayerService;
+
+/**
+ * 结算
+ * 
+ * @author 滕洁
+ * @date 2016-12-21
+ */
+public class ControlMultiple {
+
+	private static LedgerService ledgerService = (LedgerService) ContextLoader.getCurrentWebApplicationContext().getBean("LedgerService");
+
+	private static PlayerService playerService = (PlayerService) ContextLoader.getCurrentWebApplicationContext().getBean("PlayerService");
+
+	/**
+	 * 打牌前提示，获取每张牌能胡的番数
+	 * 
+	 * @return
+	 */
+	public static Map<String, Object> getMultiple(String playerId, String roomId, String pai) {
+
+		GameRoom gameRoom = ControlRoom.roomRule.get(roomId);
+		List<String> huList = new ArrayList<String>(ControlRoom.allLogic.get(roomId).usermj.get(playerId));
+		huList.add(pai);
+		Map<String, Integer> multiple = CalculateMultiple.getMultiple(huList, ControlRoom.allLogic.get(roomId).userPG.get(playerId), pai, ControlRoom.benJin.get(roomId), gameRoom.getGameArea(), roomId);
+
+		Integer ledgerNum = 0;
+		String ledger_detail = "";
+
+		/**
+		 * 如果是阆中，判断是否报，摆
+		 */
+		String gameArea = ControlRoom.roomRule.get(roomId).getGameArea();
+		for (Entry<String, Integer> entry : multiple.entrySet()) {
+			if (gameArea.equals("langZhong")) {
+				if (!ControlRoom.playerAdditional.containsKey(roomId) || !ControlRoom.playerAdditional.get(roomId).containsKey(roomId)) {
+
+					if (entry.getKey().equals("报")) {
+						continue;
+					}
+				}
+				/**摆?**/
+			}
+			ledgerNum += entry.getValue();
+			ledger_detail += entry.getKey() + " ";
+		}
+
+		if (ledgerNum == 0) {
+
+			ledger_detail = "平胡";
+		}
+
+		/**
+		 * 获取倍数
+		 */
+		if (!gameRoom.getGameArea().equals("langZhong") && !gameRoom.getGameArea().equals("guangAn")) {
+			Integer multipleNum = 1;
+			for (int i = 0; i < ledgerNum; i++) {
+				multipleNum = multipleNum * 2;
+			}
+			ledgerNum = multipleNum;
+		} else if (ledgerNum == 0) {
+			ledgerNum = 1;
+		}
+
+		Map<String, Object> multiple_map = new HashMap<>();
+		multiple_map.put("detail", ledger_detail);
+		multiple_map.put("ledgerNum", ledgerNum);
+
+		return multiple_map;
+	}
+
+	/**
+	 * 和牌后 向数据库中插入流水 title: 胡 杠..
+	 * 
+	 * 杠时 要判断是否有刮风下雨
+	 */
+	public static Map<String, List<Map<String, Object>>> addLedger(String playerId, String playingId, String title, String roomId, String pai) {
+
+		GameRoom gameRoom = ControlRoom.roomRule.get(roomId);
+		List<String> player = new ArrayList<String>(ControlRoom.gamePlayerPosition.get(roomId).values());
+		List<String> huPlayer = ControlRoom.huPlayer.get(roomId);
+		List<String> noHuPlayer = new ArrayList<>();// targetPlayer List
+		for (String str : player) {
+			if (!str.equals(playerId)) {
+				if (gameRoom.getGameType() == 0) {
+					if (!huPlayer.contains(str)) {
+						noHuPlayer.add(str);
+					}
+				} else {
+					noHuPlayer.add(str);
+				}
+			}
+
+		}
+
+		/**
+		 * 收入方
+		 */
+		Ledger ledgerAdd = new Ledger();
+
+		// 流水类型
+		String ledgerNameAdd = "";
+		// 流水名
+		String targetAdd = "";
+		// 流水分数/金额
+		Integer ledgerScore = 0;
+		// 单个流水分数/金额
+		Integer ledgerScoreOne = 0;
+		// 流水detail
+		String ledgerDetail = "";
+		// 流水番数
+		Integer ledgerNum = 0;
+		if (title.equals("hu")) {
+			// 和牌时 手中的牌+要胡的牌
+			List<String> huList = new ArrayList<String>(ControlRoom.allLogic.get(roomId).usermj.get(playerId));
+			huList.add(pai);
+			// 获取番数详情
+			Map<String, Integer> multiple = CalculateMultiple.getMultiple(huList, ControlRoom.allLogic.get(roomId).userPG.get(playerId), pai, ControlRoom.benJin.get(roomId), ControlRoom.roomRule.get(roomId).getGameArea(), roomId);
+
+			/**
+			 * 杠上花 杠上炮
+			 */
+			List<String> stepList = ControlRoom.stepRecord.get(roomId);
+			// 杠上花
+			if (stepList.size() > 2 && !ControlRoom.roomRule.get(roomId).getGameArea().equals("DaoDaohu")) {
+				JSONObject json_3Step = JSONObject.fromObject(stepList.get(stepList.size() - 3));
+				System.out.println("胡牌的步骤记录===》》》"+json_3Step);
+				if (json_3Step.get("title").equals("gang")) {
+					multiple.put("杠上花", 1);
+
+					/**
+					 * 点杠花   点杠炮
+					 * 1:是否有人点杠-
+					 * 2:规则是否是点杠炮
+					 */
+					if (stepList.size() > 6) {
+						JSONObject json_6Step = JSONObject.fromObject(stepList.get(stepList.size() - 6));
+						if (json_6Step.getString("title").equals("gang")) {
+							if (gameRoom.getRule().contains("dianGangPao")) {
+								noHuPlayer.clear();
+								noHuPlayer.add(json_6Step.getString("playerId"));
+							}
+						}
+					}
+
+				}
+
+				// 杠上炮
+				if (stepList.size() > 3) {
+					JSONObject json_4Step = JSONObject.fromObject(stepList.get(stepList.size() - 4));
+					if (json_4Step.get("title").equals("gang")) {
+						multiple.put("杠上炮", 1);
+					}
+				}
+			}
+
+			if (playerId.equals(playingId)) {
+
+//				if(){
+//					
+//				}
+				ledgerNameAdd = "自摸";
+				multiple.put("自摸", 0);
+				targetAdd = getTarget(gameRoom.getGameType(), noHuPlayer, player.size(), roomId, playerId);
+			} else {
+
+				noHuPlayer.clear();
+				noHuPlayer.add(playingId);
+				ledgerNameAdd = "胡";
+				targetAdd = ControlRoom.getMjPosition(ControlRoom.getRelativePosition(roomId, playerId, playingId));
+			}
+			/**
+			 * 获取番数明细
+			 */
+			for (String str : multiple.keySet()) {
+				ledgerDetail += (str + ",");
+			}
+			if (multiple.size() > 0) {
+				ledgerDetail = ledgerDetail.substring(0, ledgerDetail.length() - 1);
+			}
+			for (Integer num : multiple.values()) {
+				ledgerNum += num;
+			}
+			if (ledgerDetail.equals("")) {
+				ledgerDetail = "平胡";
+			}
+
+			/**
+			 * 获取分数 番数还是倍数
+			 */
+			Integer topMutiple = ControlRoom.roomRule.get(roomId).getTopMultiple();
+			if (ledgerNum > topMutiple)
+				ledgerNum = topMutiple;
+			if (!gameRoom.getGameArea().equals("langZhong") && !gameRoom.getGameArea().equals("guangAn")) {
+				Integer multipleNum = 1;
+				for (int i = 0; i < ledgerNum; i++) {
+					multipleNum = multipleNum * 2;
+				}
+
+				ledgerScore = gameRoom.getBaseScore() * multipleNum * noHuPlayer.size();
+				ledgerScoreOne = gameRoom.getBaseScore() * multipleNum;
+				ledgerNum = multipleNum;
+			} else {
+				if (ledgerNum == 0) {
+					ledgerScore = gameRoom.getBaseScore() * noHuPlayer.size();
+					ledgerScoreOne = gameRoom.getBaseScore();
+					ledgerNum = 1;
+				} else {
+					ledgerScore = gameRoom.getBaseScore() * ledgerNum * noHuPlayer.size();
+					ledgerScoreOne = gameRoom.getBaseScore() * ledgerNum;
+				}
+			}
+
+			/**
+			 * 规则
+			 * 1：自摸加底/自摸加番
+			 */
+			if (ledgerNameAdd.equals("自摸")) {
+				if (gameRoom.getRule().contains("ziMoBei") || gameRoom.getRule().contains("ziMoFan")) {
+					ledgerNum *= 2;
+					ledgerScore *= 2;
+					ledgerScoreOne *= 2;
+				} else {
+					ledgerNum += 1;
+					ledgerScore += gameRoom.getBaseScore() * noHuPlayer.size();
+					ledgerScoreOne += gameRoom.getBaseScore();
+				}
+			}
+
+			//更新最大番数
+			PlayerService playerService = (PlayerService) ControlRoom.getServiceBean("PlayerService");
+			Integer maxMutiple = playerService.get_maxMultipleByPlayerId(playerId);
+
+			if (ledgerNum > maxMutiple) {
+
+				playerService.update_maxMultiple(playerId, ledgerNum);
+			}
+
+		} else {
+			if (title.equals(Param.GANG_AN)) {
+
+				noHuPlayer.remove(playerId);
+				ledgerNameAdd = "下雨";
+				targetAdd = getTarget(gameRoom.getGameType(), noHuPlayer, player.size(), roomId, playerId);
+				ledgerScore = gameRoom.getBaseScore() * 2 * noHuPlayer.size();
+				ledgerScoreOne = gameRoom.getBaseScore() * 2;
+				ledgerNum = 2;
+			} else if (title.equals(Param.GANG_BA)) {
+
+				noHuPlayer.remove(playerId);
+				ledgerNameAdd = "刮风";
+				targetAdd = getTarget(gameRoom.getGameType(), noHuPlayer, player.size(), roomId, playerId);
+				ledgerScore = gameRoom.getBaseScore() * noHuPlayer.size();
+				ledgerScoreOne = gameRoom.getBaseScore();
+				ledgerNum = 1;
+			} else if (title.equals(Param.GANG_MING)) {
+
+				ledgerNameAdd = "刮风";
+				noHuPlayer.clear();
+				noHuPlayer.add(playingId);
+				targetAdd = ControlRoom.getMjPosition(ControlRoom.getRelativePosition(roomId, playerId, playingId));
+				ledgerScore = gameRoom.getBaseScore() * 2;
+				ledgerScoreOne = gameRoom.getBaseScore() * 2;
+				ledgerNum = 2;
+			}
+
+		}
+
+		ledgerAdd.setPlayerId(playerId);
+		if (ControlRoom.friendGameNum.containsKey(roomId)) {
+			ledgerAdd.setGameNum(ControlRoom.friendGameNum.get(roomId));
+		}
+
+		ledgerAdd.setLedgerName(ledgerNameAdd);
+		ledgerAdd.setLedgerType("0");
+		ledgerAdd.setTarget(targetAdd);
+		ledgerAdd.setLedgerScore(ledgerScore);
+		ledgerAdd.setLedgerDetail(ledgerDetail);
+		ledgerAdd.setLedgerNum(ledgerNum);
+		ledgerAdd.setRoomId(roomId);
+
+		Map<String, Object> addTarget = new HashMap<>();
+
+		addTarget.put("playerId", playerId);
+		addTarget.put("position", ControlRoom.getDirection(roomId, playerId));
+		addTarget.put("score", ledgerScore);
+
+		// 保存到数据库
+		ledgerService.addLedger(ledgerAdd);
+		// 判断当前对局类型 选择结算方式（个人信息中数据的变化）
+		if (gameRoom.getType() == 0) {
+
+			// 好友房进行积分结算
+			playerService.scoreSettlement(ledgerAdd.getPlayerId(), ledgerAdd.getLedgerScore());
+			ControlRoom.friendsScore.get(roomId).put(playerId, ControlRoom.friendsScore.get(roomId).get(playerId) + ledgerAdd.getLedgerScore());
+		} else {
+			// 判断是金币场还是演示场
+			if (!gameRoom.getRule().contains("ai")) {
+				// 金币场
+				playerService.goldSettlement(ledgerAdd.getPlayerId(), ledgerAdd.getLedgerScore());
+
+			}
+		}
+
+		/**
+		 * 支出方
+		 */
+		String ledgerNameReduce = "";
+		if (ledgerNameAdd.equals("胡")) {
+			ledgerNameReduce = "点炮";
+		} else {
+			ledgerNameReduce = "被" + ledgerNameAdd;
+		}
+		List<Map<String, Object>> reduceList = new ArrayList<>();
+
+		for (String str : noHuPlayer) {
+			Ledger ledgerReduce = new Ledger();
+			ledgerReduce.setPlayerId(str);
+			ledgerReduce.setLedgerScore(-ledgerScoreOne);
+			if (ControlRoom.friendGameNum.containsKey(roomId)) {
+				ledgerReduce.setGameNum(ControlRoom.friendGameNum.get(roomId));
+			}
+			ledgerReduce.setLedgerType("1");
+			ledgerReduce.setLedgerName(ledgerNameReduce);
+			ledgerReduce.setLedgerDetail(ledgerDetail);
+			ledgerReduce.setTarget(ControlRoom.getMjPosition(ControlRoom.getRelativePosition(roomId, str, playerId)));
+			ledgerReduce.setLedgerNum(ledgerNum);
+			ledgerReduce.setRoomId(roomId);
+
+			Map<String, Object> reduceMap = new HashMap<>();
+			reduceMap.put("playerId", str);
+			reduceMap.put("position", ControlRoom.getDirection(roomId, str));
+			reduceMap.put("score", ledgerScoreOne);
+			reduceList.add(reduceMap);
+			// 保存到数据库
+			ledgerService.addLedger(ledgerReduce);
+			// 判断当前的牌局类型
+			if (gameRoom.getType() == 0) {
+				// 好友场
+				playerService.scoreSettlement(str, -ledgerScoreOne);
+				ControlRoom.friendsScore.get(roomId).put(str, ControlRoom.friendsScore.get(roomId).get(str) - ledgerScoreOne);
+			} else {
+				if (!gameRoom.getRule().contains("ai")) {
+					// 金币场
+					playerService.goldSettlement(str, -ledgerScoreOne);
+
+				}
+			}
+		}
+
+		//返回  即时结算参数
+		Map<String, List<Map<String, Object>>> map = new HashMap<>();
+		map.put("addTarget", new ArrayList<Map<String, Object>>());
+		map.get("addTarget").add(addTarget);
+		map.put("reduceTarget", reduceList);
+		return map;
+
+	}
+
+	/**
+	 * 删除流水
+	 * 
+	 * @param playerId
+	 */
+	public static void deleteLedger(String playerId) {
+		ledgerService.deleteLedger(playerId);
+
+	}
+
+	/**
+	 * 获取 多个target String
+	 * 
+	 * @param args
+	 */
+	private static String getTarget(int type, List<String> noHuPlayer, int playerSize, String roomId, String playerId) {
+		String targetAdd = "";
+		if (type == 0) {// 血战
+
+			if (noHuPlayer.size() == 3) {
+				targetAdd = "3家";
+			} else if (noHuPlayer.size() == 2) {
+				if (playerSize == 4) {
+					for (String str : noHuPlayer) {
+						targetAdd += ControlRoom.getMjPosition(ControlRoom.getRelativePosition(roomId, playerId, str));
+						targetAdd += ",";
+					}
+					targetAdd = targetAdd.substring(0, targetAdd.length() - 1);
+				} else if (playerSize == 3) {
+					targetAdd = "2家";
+				}
+			} else {
+				targetAdd = ControlRoom.getMjPosition(ControlRoom.getRelativePosition(roomId, playerId, noHuPlayer.get(0)));
+			}
+
+		} else {// 血流
+			if (playerSize == 4) {
+				targetAdd = "3家";
+			} else if (playerSize == 3) {
+				targetAdd = "2家";
+
+			}
+		}
+		return targetAdd;
+	}
+
+	public static void main(String[] args) {
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("请一色", 2);
+		map.put("对对胡", 3);
+		String key = map.keySet().toString();
+		System.out.println(key.substring(1, key.length() - 1));
+	}
+
+}

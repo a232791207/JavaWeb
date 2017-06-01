@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.sanker.entity.game">
+	<class name="GameRecord" table="gameRecord">
+		<id name="id">
+			<column name="id" />
+			<generator class="uuid"></generator>
+		</id>
+		<property name="playerId" type="string"/>
+		<property name="roundId" type="string"/>
+		<property name="roomId" type="string"/>
+		<property name="paiList" type="string"/>
+		<property name="multiple" type="integer"/>
+		<property name="score" type="integer"/>
+		<property name="details" type="string"/>
+	</class>
+</hibernate-mapping>

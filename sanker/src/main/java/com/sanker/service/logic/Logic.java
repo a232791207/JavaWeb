@@ -1,0 +1,811 @@
+package com.sanker.service.logic;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import com.sanker.entity.game.GameRoom;
+import com.sanker.param.Param;
+import com.sanker.service.utils.JSONHelper;
+
+/**
+ * 麻将逻辑（各种牌记录）
+ * 
+ * @author 滕洁
+ * @date 2016-11-1
+ */
+public class Logic {
+
+	/*
+	 * 房间由庄家创建
+	 * 
+	 * F牌操作，应该在同一房间所有玩家都准备好之后
+	 * 
+	 * 当用户连接关闭后，再次连接。-》在F牌 时需判断玩家是否在已有的局Z，如果在则不重新F牌。需要在websocketZ判断。
+	 * 
+	 * 根据传递的参数实现不同的玩法（实现不同的规则）
+	 * 
+	 * 规则怎么封装？
+	 */
+
+	/**
+	 * 一副牌
+	 */
+	public List<String> mj = new ArrayList<String>();
+
+	/**
+	 * 一局所有玩家以及相应的手牌
+	 */
+	public Map<String, List<String>> usermj = new LinkedHashMap<String, List<String>>();
+
+	/**
+	 * 玩家已经碰或杠的牌
+	 */
+	public Map<String, List<String>> userPG = new LinkedHashMap<String, List<String>>();
+
+	/**
+	 * 玩家碰杠牌的标记
+	 */
+	public Map<String, Map<String, Integer>> userPGSign = new HashMap<String, Map<String, Integer>>();
+
+	/**
+	 * 听用玩家飞的牌
+	 */
+	public Map<String, Map<String, String>> userFei = new HashMap<String, Map<String, String>>();
+
+	/**
+	 * 玩家已出的牌
+	 */
+	public Map<String, List<String>> userChu = new HashMap<String, List<String>>();
+
+	/**
+	 * 玩家已胡的牌
+	 */
+	public Map<String, List<String>> userHu = new HashMap<String, List<String>>();
+
+	/**
+	 * 庄家最后一张摸的牌
+	 */
+	public String lastPai = "lastPai";
+
+	/**
+	 * 正在出牌的玩家id
+	 */
+	public String playingId = "playingId";
+
+	/**
+	 * 牌局是否结束
+	 */
+	public boolean endFlag = false;
+
+	/**
+	 * 构造函数，为一副麻将赋值。 type:
+	 */
+	public Logic(String playType, String followType) {
+		String[] mjwan = new String[] { "1W", "2W", "3W", "4W", "5W", "6W", "7W", "8W", "9W" };
+		String[] mjtiao = new String[] { "1T", "2T", "3T", "4T", "5T", "6T", "7T", "8T", "9T" };
+		String[] mjtong = new String[] { "1D", "2D", "3D", "4D", "5D", "6D", "7D", "8D", "9D" };
+		String[] mjzfb = new String[] { "0Z", "0F", "0B" };
+		
+		// W
+		if (!playType.equals(Param.TY_CGPT)) {
+			for (int i = 0; i < 9; i++) {
+				for (int n = 1; n < 5; n++) {
+
+					this.mj.add(mjwan[i]);
+				}
+			}
+		}
+		// T
+		for (int i = 0; i < 9; i++) {
+			for (int n = 1; n < 5; n++) {
+
+				this.mj.add(mjtiao[i]);
+			}
+		}
+		for (int i = 0; i < 9; i++) {
+			for (int n = 1; n < 5; n++) {
+
+				this.mj.add(mjtong[i]);
+			}
+		}
+
+		if (playType.equals(Param.TY_GUI)) {
+			int iNum = 0;
+			if (followType.equals(Param.LZ_ONE)) {
+				iNum = 4;
+			} else if (followType.equals(Param.LZ_TWO)) {
+				iNum = 8;
+			}
+			for (int i = 0; i < iNum; i++) {
+				this.mj.add(mjzfb[0]);
+			}
+		}
+
+		if (playType.equals(Param.TY_ZFB)) {
+			for (int i = 0; i < 3; i++) {
+				for (int j = 1; j < 5; j++) {
+					this.mj.add(mjzfb[i]);
+				}
+			}
+		}
+
+		Collections.shuffle(this.mj);
+
+	}
+
+	/**
+	 * 执行F牌操作 人数，牌数
+	 * 
+	 * @param args
+	 */
+	public String fapai(List<String> userList, String paiNumType) {
+
+		Map<String, List<String>> paiMap = new HashMap<String, List<String>>();
+		for (String user : userList) {
+			List<String> list = new ArrayList<String>();
+			paiMap.put(user, list);
+		}
+
+		int pai = paiNumType == Param.PAINUM_SEVEN ? 7 : paiNumType == Param.PAINUM_TEN ? 10 : 13;
+		for (int i = 0; i < pai; i++) {
+			for (String user : userList) {
+				paiMap.get(user).add(this.mj.get(this.mj.size() - 1));
+				this.mj.remove(this.mj.size() - 1);
+			}
+		}
+//		
+//		//测试
+//		//给第1个玩家刷 1 1 1 2 2 2 3 3 3 4 4 4 5W
+//		//给第2个玩家刷 1 1 1 2 2 2 3 3 3 4 4 4 5T
+//		//给第3个玩家刷 1 1 1 2 2 2 3 3 3 4 4 4 5D
+//		//给第4个玩家刷 6 6 6 7 7 7 8 8 8 9 9 9W 6T
+//		int [][]m = {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}};
+//		for(int i=0; i<this.mj.size();i++){
+//			System.out.println(i+this.mj.get(i));
+//			if(this.mj.get(i).equals("1W")){//发3张1万
+//				if(m[0][0]<3){
+//					paiMap.get(userList.get(0)).add(this.mj.get(i));
+//					this.mj.remove(i--);
+//					m[0][0]++;
+//				}
+//			}else if(this.mj.get(i).equals("2W")){//发3张2万
+//				if(m[0][1]<3){
+//					paiMap.get(userList.get(0)).add(this.mj.get(i));
+//					this.mj.remove(i--);
+//					m[0][1]++;
+//				}
+//			}else if(this.mj.get(i).equals("3W")){//发3张3万
+//				if(m[0][2]<3){
+//					paiMap.get(userList.get(0)).add(this.mj.get(i));
+//					this.mj.remove(i--);
+//					m[0][2]++;
+//				}
+//			}else if(this.mj.get(i).equals("4W")){//发3张4万
+//				if(m[0][3]<3){
+//					paiMap.get(userList.get(0)).add(this.mj.get(i));
+//					this.mj.remove(i--);
+//					m[0][3]++;
+//				}
+//			}else if(this.mj.get(i).equals("5W")){//发1张5万
+//				if(m[0][4]<1){
+//					paiMap.get(userList.get(0)).add(this.mj.get(i));
+//					this.mj.remove(i--);
+//					m[0][4]++;
+//				}
+//			}else if(this.mj.get(i).equals("1T")){//发3张1条
+//				if(m[1][0]<3){
+//					paiMap.get(userList.get(1)).add(this.mj.get(i));
+//					this.mj.remove(i--);
+//					m[1][0]++;
+//				}
+//			}else if(this.mj.get(i).equals("2T")){//发3张2条
+//				if(m[1][1]<3){
+//					paiMap.get(userList.get(1)).add(this.mj.get(i));
+//					this.mj.remove(i--);
+//					m[1][1]++;
+//				}
+//			}else if(this.mj.get(i).equals("3T")){//发3张3条
+//				if(m[1][2]<3){
+//					paiMap.get(userList.get(1)).add(this.mj.get(i));
+//					this.mj.remove(i--);
+//					m[1][2]++;
+//				}
+//			}else if(this.mj.get(i).equals("4T")){//发3张4条
+//				if(m[1][3]<3){
+//					paiMap.get(userList.get(1)).add(this.mj.get(i));
+//					this.mj.remove(i--);
+//					m[1][3]++;
+//				}
+//			}else if(this.mj.get(i).equals("5T")){//发1张5条
+//				if(m[1][4]<1){
+//					paiMap.get(userList.get(1)).add(this.mj.get(i));
+//					this.mj.remove(i--);
+//					m[1][4]++;
+//				}
+//			}else if(this.mj.get(i).equals("1D")){//发3张1同
+//				if(m[2][0]<3){
+//					paiMap.get(userList.get(2)).add(this.mj.get(i));
+//					this.mj.remove(i--);
+//					m[2][0]++;
+//				}
+//			}else if(this.mj.get(i).equals("2D")){//发3张2同
+//				if(m[2][1]<3){
+//					paiMap.get(userList.get(2)).add(this.mj.get(i));
+//					this.mj.remove(i--);
+//					m[2][1]++;
+//				}
+//			}else if(this.mj.get(i).equals("3D")){//发3张3同
+//				if(m[2][2]<3){
+//					paiMap.get(userList.get(2)).add(this.mj.get(i));
+//					this.mj.remove(i--);
+//					m[2][2]++;
+//				}
+//			}else if(this.mj.get(i).equals("4D")){//发3张4同
+//				if(m[2][3]<3){
+//					paiMap.get(userList.get(2)).add(this.mj.get(i));
+//					this.mj.remove(i--);
+//					m[2][3]++;
+//				}
+//			}else if(this.mj.get(i).equals("5D")){//发1张5同
+//				if(m[2][4]<1){
+//					paiMap.get(userList.get(2)).add(this.mj.get(i));
+//					this.mj.remove(i--);
+//					m[2][4]++;
+//				}
+//			}else if(this.mj.get(i).equals("6W")){//发3张6W
+//				if(m[3][0]<3){
+//					paiMap.get(userList.get(3)).add(this.mj.get(i));
+//					this.mj.remove(i--);
+//					m[3][0]++;
+//				}
+//			}else if(this.mj.get(i).equals("7W")){//发3张7W
+//				if(m[3][1]<3){
+//					paiMap.get(userList.get(3)).add(this.mj.get(i));
+//					this.mj.remove(i--);
+//					m[3][1]++;
+//				}
+//			}else if(this.mj.get(i).equals("8W")){//发3张8W
+//				if(m[3][2]<3){
+//					paiMap.get(userList.get(3)).add(this.mj.get(i));
+//					this.mj.remove(i--);
+//					m[3][2]++;
+//				}
+//			}else if(this.mj.get(i).equals("9W")){//发3张9W
+//				if(m[3][3]<3){
+//					paiMap.get(userList.get(3)).add(this.mj.get(i));
+//					this.mj.remove(i--);
+//					m[3][3]++;
+//				}
+//			}else if(this.mj.get(i).equals("6T")){//发1张6T
+//				if(m[3][4]<1){
+//					paiMap.get(userList.get(3)).add(this.mj.get(i));
+//					this.mj.remove(i--);
+//					m[3][4]++;
+//				}
+//			}
+//		}
+//		//删除1W2W，将其添加在麻将后面
+//		for(int i=0; i<this.mj.size();i++){
+//			if(this.mj.get(i).equals("1W")||this.mj.get(i).equals("2W")){
+//				this.mj.remove(i--);
+//			}
+//		}
+//		this.mj.add("2W");
+//		this.mj.add("1W");
+		
+		String lastPai = this.mj.get(mj.size() - 1);
+		paiMap.get(userList.get(0)).add(this.mj.get(mj.size() - 1));// 庄家多摸一张牌
+		this.mj.remove(mj.size() - 1);
+
+		// 排序 赋值
+		for (String user : userList) {
+			this.usermj.put(user, this.sortPai(paiMap.get(user), user));
+			this.userPG.put(user, new ArrayList<String>());
+			this.userPGSign.put(user, new HashMap<String, Integer>());
+			this.userFei.put(user, new HashMap<String, String>());
+			this.userChu.put(user, new ArrayList<String>());
+			this.userHu.put(user, new ArrayList<String>());
+		}
+		// 输出
+		// System.out.println(JSONHelper.toJson(this.usermj));
+		System.out.println("F牌完成！");
+		this.lastPai = lastPai;
+		this.playingId = userList.get(0);
+		return lastPai;
+
+	}
+
+	/**
+	 * 给牌排序
+	 * 
+	 * @param args
+	 */
+	public List<String> sortPai(List<String> paiList, String playerId) {
+		/**
+		 * 
+		 * 是否应该用int来代表麻将？
+		 */
+
+		// 临时保存
+		List<String> wan = new ArrayList<String>();
+		List<String> tiao = new ArrayList<String>();
+		List<String> tong = new ArrayList<String>();
+		List<String> zhong = new ArrayList<String>();
+		List<String> fa = new ArrayList<String>();
+		List<String> bai = new ArrayList<String>();
+		for (String string : paiList) {
+			if (string.contains("W")) {
+				wan.add(string);
+			} else if (string.contains("T")) {
+				tiao.add(string);
+			} else if (string.contains("D")) {
+				tong.add(string);
+			} else if (string.contains("Z")) {
+				zhong.add(string);
+			} else if (string.contains("F")) {
+				fa.add(string);
+			} else if (string.contains("B")) {
+				bai.add(string);
+			}
+		}
+
+		Collections.sort(wan);
+		Collections.sort(tiao);
+		Collections.sort(tong);
+		List<String> list = new ArrayList<String>();
+
+		/**
+		 * 如果有缺,缺在最后面
+		 */
+		if (ControlRoom.quePaiMap.containsKey(playerId) && !ControlRoom.quePaiMap.get(playerId).equals("")) {
+			String queType = ControlRoom.quePaiMap.get(playerId);
+
+			switch (queType) {
+			case "W":
+				list.addAll(tiao);
+				list.addAll(tong);
+				list.addAll(zhong);
+				list.addAll(fa);
+				list.addAll(bai);
+				list.addAll(wan);
+				break;
+			case "T":
+				list.addAll(wan);
+				list.addAll(tong);
+				list.addAll(zhong);
+				list.addAll(fa);
+				list.addAll(bai);
+				list.addAll(tiao);
+				break;
+			case "D":
+				list.addAll(wan);
+				list.addAll(tiao);
+				list.addAll(zhong);
+				list.addAll(fa);
+				list.addAll(bai);
+				list.addAll(tong);
+				break;
+			}
+
+		} else {
+			list.addAll(wan);
+			list.addAll(tiao);
+			list.addAll(tong);
+			list.addAll(zhong);
+			list.addAll(fa);
+			list.addAll(bai);
+		}
+
+		return list;
+	}
+
+	/**
+	 * 玩家摸牌(给玩家F牌)
+	 * 
+	 * @param args
+	 */
+	public String moPai(String userId) {
+		String pai = this.mj.get(this.mj.size() - 1);
+		this.mj.remove(this.mj.size() - 1);
+		this.usermj.get(userId).add(pai);
+		List<String> list = this.sortPai(this.usermj.get(userId), userId);
+		this.usermj.get(userId).clear();
+		this.usermj.get(userId).addAll(list);
+		return pai;
+	}
+
+	/**
+	 * 判断其他玩家打的牌是否能碰/其他玩家打的牌是否能杠 如果能杠则能碰
+	 * 
+	 * 
+	 * 注：1.需考虑是否缺一门。如果缺一门玩家缺的牌应该列出来。 2.听用：只能用来代替其他牌或者是飞。对听用来说没有碰杠的概念。
+	 * 3.鬼牌：如果其他玩家出的是鬼牌，其他人不能碰，不能杠。 pengType:针对血流，玩家是否和牌，和牌的话则不判断是否能碰
+	 * 
+	 * @param args
+	 */
+	public String canPG(String playerId, GameRoom gameRoom, String pai, boolean pengType) {
+		Integer num = 0;
+		List<String> list = this.usermj.get(playerId);
+		for (String string : list) {
+			if (gameRoom.getRule().contains(Param.QUE_H)) {
+				if (ControlRoom.quePaiMap.get(playerId).equals(string.charAt(1))) {
+					continue;
+				}
+			}
+
+			/************* 此处删除听用牌的判断，因为对于听用牌来说没有碰的概念，只有飞 ************/
+
+			if (gameRoom.getRule().contains(Param.TY_GUI)) {
+				if (!pai.equals("0Z")) {
+					if (string.equals("0Z")) {
+						num++;
+					}
+				} else {
+					return Param.CAN_F;
+				}
+			}
+			if (string.equals(pai)) {
+				num++;
+			}
+		}
+		if (num == 3) {
+			if (pengType) {// 血流玩家，需要判断词牌是否会影响和牌
+				return Param.CAN_F;
+			}
+			return Param.CAN_G;
+		} else if (num == 2) {
+			if (pengType) {// 血流该玩家是否和牌
+				return Param.CAN_F;
+			}
+			return Param.CAN_P;
+		} else {
+			return Param.CAN_F;
+		}
+
+	}
+
+	/**
+	 * 判断手Z的牌是否能杠 注：1.是否缺一门 2.听用：对挺用牌来说没有杠的概念 3.鬼牌：如果其他玩家出的是鬼牌，其他人不能碰，不能杠。
+	 * 
+	 * @param args
+	 */
+	public List<String> canGangPlus(String userId, GameRoom room) {
+
+		List<String> paiList = this.usermj.get(userId);
+		List<String> gangPai = new ArrayList<String>();
+		for (String string : paiList) {
+			if (room.getRule().contains(Param.QUE_H)) {
+				if (ControlRoom.quePaiMap.get(userId).equals(string.charAt(1))) {
+					continue;
+				}
+			}
+			int num = 1;
+			for (String string1 : paiList) {
+				if (string1.equals(string)) {
+					num++;
+				}
+
+				/************* 此处删除针对听用的处理，因为对于听用牌来说，没有杠的概念 *****************/
+
+				if (room.getRule().contains(Param.TY_GUI)) {
+					if (!string.equals("0Z") && string1.equals("0Z")) {
+						num++;
+					}
+				}
+			}
+
+			if (num == 5) {
+				if (!gangPai.contains(string)) {
+					gangPai.add(string);
+				}
+			}
+		}
+
+		return gangPai;
+	}
+
+	/**
+	 * 是否能飞 针对听用 手牌中含有停用牌，并且含有打出的牌
+	 */
+	public boolean canFei(String playerId, String tyType, String benJin, String pai) {
+		List<String> paiList = this.usermj.get(playerId);
+		List<String> tyList = HuPaiLogic.getTYPai(tyType, benJin);
+		if (paiList.contains(pai) && !this.userFei.get(playerId).containsKey(pai)) {
+			for (String tyPai : tyList) {
+				if (paiList.contains(tyPai))
+					return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * 飞的操作 移除 一张“飞牌” 一张听用牌
+	 */
+	public void fei(String playerId, String pai, String tyPai) {
+
+		this.usermj.get(playerId).remove(pai);
+		this.usermj.get(playerId).remove(tyPai);
+		this.userFei.get(playerId).put(pai, tyPai);
+
+	}
+
+	/**
+	 * 是否能提 已经飞了一次，并且手中还有“飞牌”
+	 */
+	public List<String> canTi(String playerId) {
+		List<String> feiPai = new ArrayList<String>();
+		for (String pai : this.usermj.get(playerId)) {
+			if (this.userFei.get(playerId).keySet().contains(pai)) {
+				feiPai.add(pai);
+			}
+		}
+
+		return feiPai;
+	}
+
+	/**
+	 * 提后的操作
+	 */
+	public void ti(String player, String pai) {
+
+		this.usermj.get(player).add(this.userFei.get(player).get(pai));
+		this.userFei.get(player).remove(pai);
+		this.usermj.get(player).remove(pai);
+		for (int i = 0; i < 3; i++) {
+			this.userPG.get(player).add(pai);
+		}
+		this.userPGSign.get(player).put(pai, 3);
+
+	}
+
+	/**
+	 * 判断是否能进行巴杠 考虑是否是鬼牌
+	 */
+	public List<String> canBa(String playerId, boolean isGui) {
+
+		List<String> canBaPai = new ArrayList<String>();
+		for (String pai : this.userPGSign.get(playerId).keySet()) {
+
+			if (this.userPGSign.get(playerId).get(pai) == 3 && this.usermj.get(playerId).contains(pai)) {
+				canBaPai.add(pai);
+			}
+			if (isGui) {
+				if (this.userPGSign.get(playerId).get(pai) == 3 && pai.equals("0Z")) {
+					canBaPai.add(pai);
+				}
+			}
+
+		}
+		return canBaPai;
+
+		/*
+		 * List<String> paiList = this.usermj.get(playerId); Map<String,
+		 * Integer> pgMap = this.userPGSign.get(playerId); for (String pai :
+		 * paiList) { if(condition.get("playType").equals(Param.TY_GUI)){
+		 * if(pai.equals("0Z")&&pgMap.containsValue(3)){ return true; } }
+		 * if(pgMap.containsKey(pai)&&pgMap.get(pai)==3){ return true; } }
+		 * return false;
+		 */
+	}
+
+	/**
+	 * 碰后的操作 注：需注意 鬼牌 pgType:所碰的牌是否有鬼牌参与
+	 * 
+	 */
+	public void peng(String pai, String playerId, boolean havaGui) {
+
+		if (havaGui) {
+			// 判断手中要碰的该种牌的数量。如果没有则移除两张鬼牌，如果有一张 减少一张鬼牌 如果有两张以上 不减少鬼牌
+			Integer paiNum = Param.getElementNum(this.usermj.get(playerId), pai);
+			if (paiNum < 2) {
+				for (int i = 0; i < paiNum; i++) {
+					this.usermj.get(playerId).remove(pai);
+					this.userPG.get(playerId).add(pai);
+				}
+				for (int i = 0; i < 2 - paiNum; i++) {
+					this.usermj.get(playerId).remove("0Z");
+					this.userPG.get(playerId).add("0Z");
+				}
+			} else {
+				for (int i = 0; i < 2; i++) {
+					this.usermj.get(playerId).remove(pai);
+					this.userPG.get(playerId).add(pai);
+				}
+			}
+		} else {
+			// 减少玩家手牌
+			for (int i = 0; i < 2; i++) {
+				this.usermj.get(playerId).remove(pai);
+			}
+			// 向 userPGZ添加数据
+			for (int i = 0; i < 3; i++) {
+				this.userPG.get(playerId).add(pai);
+			}
+		}
+		this.userPGSign.get(playerId).put(pai, 3);
+
+	}
+
+	/**
+	 * 杠 1.暗杠 手Z的拍减少4个 2.明杠 手Z的牌减少3个 3.巴杠 手Z的牌减少1个
+	 * 
+	 * 碰杠类型： 鬼牌：巴杠：已知选的牌 isGui：是否是泸州鬼牌
+	 * 
+	 */
+	public void gang(String playerId, String pai, String gangType, boolean isGui) {
+
+		if (isGui) {
+			if (gangType.equals(Param.GANG_BA)) {
+				if (this.usermj.get(playerId).contains(pai)) {
+					this.usermj.get(playerId).remove(pai);
+					this.userPG.get(playerId).add(this.userPG.get(playerId).lastIndexOf(pai) + 1, pai);
+				} else {
+					this.usermj.get(playerId).remove("0Z");
+
+					this.userPG.get(playerId).add(this.userPG.get(playerId).lastIndexOf(pai) + 1, "0Z");
+				}
+			} else if (gangType.equals(Param.GANG_MING)) {
+				Integer paiNum = Param.getElementNum(this.usermj.get(playerId), pai);
+				if (paiNum < 3) {
+					for (int i = 0; i < paiNum; i++) {
+						this.usermj.get(playerId).remove(pai);
+						this.userPG.get(playerId).add(pai);
+					}
+					for (int i = 0; i < 3 - paiNum; i++) {
+						this.usermj.get(playerId).remove("0Z");
+						this.userPG.get(playerId).add("0Z");
+					}
+					this.userPG.get(playerId).add(pai);
+				} else {
+					for (int i = 0; i < 3; i++) {
+						this.usermj.get(playerId).remove(pai);
+						this.userPG.get(playerId).add(pai);
+					}
+					this.userPG.get(playerId).add(pai);
+				}
+			} else if (gangType.equals(Param.GANG_AN)) {
+				Integer paiNum = Param.getElementNum(this.usermj.get(playerId), pai);
+				if (paiNum < 4) {
+					for (int i = 0; i < paiNum; i++) {
+						this.usermj.get(playerId).remove(pai);
+						this.userPG.get(playerId).add(pai);
+					}
+					for (int i = 0; i < 4 - paiNum; i++) {
+						this.usermj.get(playerId).remove("0Z");
+						this.userPG.get(playerId).add("0Z");
+					}
+				} else {
+					for (int i = 0; i < 4; i++) {
+						this.usermj.get(playerId).remove(pai);
+						this.userPG.get(playerId).add(pai);
+					}
+				}
+			}
+		} else {
+			if (gangType.equals(Param.GANG_BA)) {
+
+				this.usermj.get(playerId).remove(pai);
+				this.userPG.get(playerId).add(this.userPG.get(playerId).lastIndexOf(pai) + 1, pai);
+
+			} else if (gangType.equals(Param.GANG_MING)) {
+				for (int i = 0; i < 3; i++) {
+					this.usermj.get(playerId).remove(pai);
+					this.userPG.get(playerId).add(pai);
+				}
+				this.userPG.get(playerId).add(pai);
+			} else if (gangType.equals(Param.GANG_AN)) {
+				for (int i = 0; i < 4; i++) {
+					this.usermj.get(playerId).remove(pai);
+					this.userPG.get(playerId).add(pai);
+				}
+			}
+		}
+		this.userPGSign.get(playerId).put(pai, 4);
+
+	}
+
+	/**
+	 * 打牌
+	 */
+	public void daPai(String pai, String userId) {
+		// 减少玩家手牌
+		this.usermj.get(userId).remove(pai);
+
+	}
+
+	/**
+	 * 获取下一位玩家Id
+	 */
+	public String getNextPlayer(String playerId) {
+		List<String> playerIds = new ArrayList<>(this.usermj.keySet());
+		Integer playerIndex = playerIds.indexOf(playerId);
+		if (playerIndex != playerIds.size() - 1) {
+			return playerIds.get(playerIndex += 1);
+		} else {
+			return playerIds.get(0);
+		}
+
+	}
+
+	/**
+	 * 换三张 type:交换顺序
+	 */
+	public Map<String, List<String>> swap3(int type, Map<String, int[]> paiIndex) {
+
+		/**
+		 * 找出每位玩家挑出的牌 并从手牌中将这些牌移除
+		 */
+		Map<String, List<String>> swapMap = new HashMap<String, List<String>>();
+		for (Entry<String, int[]> entry : paiIndex.entrySet()) {
+			List<String> swapList = new ArrayList<>();
+			for (int i : entry.getValue()) {
+				swapList.add(this.usermj.get(entry.getKey()).get(i));
+			}
+
+			this.usermj.get(entry.getKey()).removeAll(swapList);
+			swapMap.put(entry.getKey(), swapList);
+		}
+		/**
+		 * 保存每个玩家交换到的牌 String json
+		 */
+		Map<String, List<String>> swapdMap = new HashMap<>();
+
+		/**
+		 * 根据顺序进行交换
+		 */
+		List<String> userList = new ArrayList<>(this.usermj.keySet());
+		String player = "";
+		for (int i = 0; i < userList.size(); i++) {
+			swapdMap.put(userList.get(i), new ArrayList<String>());
+			if (type == 0) {
+				// 顺时针
+				if (i == userList.size() - 1) {
+					player = userList.get(0);
+				} else {
+					player = userList.get(i + 1);
+				}
+
+			} else if (type == 1) {
+				// 逆时针
+
+				if (i == 0) {
+					player = userList.get(userList.size() - 1);
+				} else {
+					player = userList.get(i - 1);
+				}
+			} else if (type == 2) {
+				// 对家
+				if (i < 2) {
+					player = userList.get(i + 2);
+				} else {
+					player = userList.get(i - 2);
+				}
+			}
+
+			this.usermj.get(userList.get(i)).addAll(swapMap.get(player));
+
+			List<String> newList = this.sortPai(this.usermj.get(userList.get(i)), userList.get(i));
+			for (String paiValue : swapMap.get(player)) {
+				Integer index = newList.indexOf(paiValue);
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("index", index);
+				map.put("value", paiValue);
+				swapdMap.get(userList.get(i)).add(JSONHelper.toJson(map));
+				System.out.println("Logic ====>>>>map661---->>>"+map);
+			}
+			this.usermj.get(userList.get(i)).clear();
+			this.usermj.get(userList.get(i)).addAll(newList);
+			System.out.println("Logic ====>>>>swapdMap665---->>>"+swapdMap);
+		}
+		return swapdMap;
+
+	}
+
+}

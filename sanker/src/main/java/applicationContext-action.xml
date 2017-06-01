@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+		    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd"
+	default-autowire="byName">
+
+	<!-- <bean id="UserInfoAction" class="com.sanker.action.userInfo.UserInfoAction"
+		scope="prototype">
+		<property name="userInfoService">
+			<ref bean="UserInfoService" />
+		</property>
+	</bean> -->
+	<!-- 登录 -->
+	<bean id="WeixinConfigure" class="com.sanker.action.weixin.WeixinConfigure" scope="prototype">
+		<property name="playerService">
+			<ref bean="PlayerService"/>
+		</property>
+	</bean>
+	
+	<!-- 玩家 -->
+	<bean id="PlayerAction" class="com.sanker.action.player.PlayerAction" scope="prototype">
+		<property name="playerService">
+			<ref bean="PlayerService"/>
+		</property>
+		<property name="playerRelationService">
+			<ref bean="PlayerRelationService"/>
+		</property>
+		<property name="rechargeService">
+			<ref bean="RechargeService"/>
+		</property>
+	</bean>
+	
+	<!-- 模板 -->
+	<bean id="TemplateAction" class="com.sanker.action.template.TemplateAction" scope="prototype">
+		<property name="templateService">
+			<ref bean="TemplateService"/>
+		</property>
+	</bean>
+	
+	<!-- 邮件 -->
+	<bean id="MailAction" class="com.sanker.action.inform.MailAction" scope="prototype">
+		<property name="mailService">
+			<ref bean="MailService"/>
+		</property>
+	</bean>
+	<!-- 流水 -->
+	<bean id="LedgerAction" class="com.sanker.action.game.LedgerAction" scope="prototype">
+		<property name="ledgerService">
+			<ref bean="LedgerService"/>
+		</property>
+	</bean>
+</beans>

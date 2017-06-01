@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="sanker"
+  id="myeclipse.1329212351875"
+  context-root="/sanker"
+  j2ee-spec="5.0"
+  archive="sanker.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+

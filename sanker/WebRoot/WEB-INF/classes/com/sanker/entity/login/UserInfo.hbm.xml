@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.sanker.entity.login">
+	<class name="UserInfo" table="userInfo">
+		<id name="userId">
+			<column name="userId" />
+			<generator class="uuid"></generator>
+		</id>
+		<property name="userName" type="string" />
+		<property name="loginName" type="string" />
+		<property name="loginPwd" type="string" />
+	</class>
+</hibernate-mapping>
